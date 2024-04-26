@@ -84,7 +84,6 @@ public class UsuarioService {
         usuarioDTO.setFechaRegistro(usuario.getFechaRegistro());
         usuarioDTO.setFotoPerfil(usuario.getFotoPerfil());
         usuarioDTO.setTipoUsuario(usuario.getTipoUsuario());
-        usuarioDTO.setIsSeguidor(usuario.getIsSeguidor() == null ? null : usuario.getIsSeguidor().getId());
         return usuarioDTO;
     }
 
@@ -97,9 +96,6 @@ public class UsuarioService {
         usuario.setFechaRegistro(usuarioDTO.getFechaRegistro());
         usuario.setFotoPerfil(usuarioDTO.getFotoPerfil());
         usuario.setTipoUsuario(usuarioDTO.getTipoUsuario());
-        final Usuario isSeguidor = usuarioDTO.getIsSeguidor() == null ? null : usuarioRepository.findById(usuarioDTO.getIsSeguidor())
-                .orElseThrow(() -> new NotFoundException("isSeguidor not found"));
-        usuario.setIsSeguidor(isSeguidor);
         return usuario;
     }
 
@@ -141,12 +137,6 @@ public class UsuarioService {
         if (idUsuarioMensajeDirecto != null) {
             referencedWarning.setKey("usuario.mensajeDirecto.idUsuario.referenced");
             referencedWarning.addParam(idUsuarioMensajeDirecto.getId());
-            return referencedWarning;
-        }
-        final Usuario isSeguidorUsuario = usuarioRepository.findFirstByIsSeguidorAndIdNot(usuario, usuario.getId());
-        if (isSeguidorUsuario != null) {
-            referencedWarning.setKey("usuario.usuario.isSeguidor.referenced");
-            referencedWarning.addParam(isSeguidorUsuario.getId());
             return referencedWarning;
         }
         final Seguidores idSeguidorSeguidores = seguidoresRepository.findFirstByIdSeguidor(usuario);
