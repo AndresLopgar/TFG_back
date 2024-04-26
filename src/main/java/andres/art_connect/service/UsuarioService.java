@@ -115,10 +115,6 @@ public class UsuarioService {
         return usuarioRepository.existsByCorreoElectronicoIgnoreCase(correoElectronico);
     }
 
-    public boolean idCompaniaExists(final Long id) {
-        return usuarioRepository.existsByIdCompaniaId(id);
-    }
-
     public ReferencedWarning getReferencedWarning(final Long id) {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final Usuario usuario = usuarioRepository.findById(id)

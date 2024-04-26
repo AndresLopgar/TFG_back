@@ -45,7 +45,6 @@ public class UsuarioDTO {
     private String tipoUsuario;
 
     @NotNull
-    @UsuarioIdCompaniaUnique
     private Long idCompania;
 
 }
