@@ -10,7 +10,7 @@ public class RouteController {
 
     @RequestMapping(value = {"/{path:[^\\.]*}", "/**/{path:[^\\.]*}"})
     public ModelAndView redirectToIndex() {
-        return new ModelAndView("forward:/index.html");
+        return new ModelAndView("forward:/dist/proyecto-integrado-front/browser/index.html");
     }
 }
 
