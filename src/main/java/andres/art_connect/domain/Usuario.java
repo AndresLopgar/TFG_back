@@ -2,12 +2,9 @@ package andres.art_connect.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -49,9 +46,8 @@ public class Usuario {
     @Column(nullable = false)
     private String tipoUsuario;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_comapania_id")
-    private Compania idComapania;
+    @OneToMany(mappedBy = "idUsuario")
+    private Set<Compania> idCompania;
 
     @OneToMany(mappedBy = "idUsuario")
     private Set<Publicacion> idPublicacion;

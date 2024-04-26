@@ -84,7 +84,6 @@ public class UsuarioService {
         usuarioDTO.setFechaRegistro(usuario.getFechaRegistro());
         usuarioDTO.setFotoPerfil(usuario.getFotoPerfil());
         usuarioDTO.setTipoUsuario(usuario.getTipoUsuario());
-        usuarioDTO.setIdComapania(usuario.getIdComapania() == null ? null : usuario.getIdComapania().getId());
         return usuarioDTO;
     }
 
@@ -97,9 +96,6 @@ public class UsuarioService {
         usuario.setFechaRegistro(usuarioDTO.getFechaRegistro());
         usuario.setFotoPerfil(usuarioDTO.getFotoPerfil());
         usuario.setTipoUsuario(usuarioDTO.getTipoUsuario());
-        final Compania idComapania = usuarioDTO.getIdComapania() == null ? null : companiaRepository.findById(usuarioDTO.getIdComapania())
-                .orElseThrow(() -> new NotFoundException("idComapania not found"));
-        usuario.setIdComapania(idComapania);
         return usuario;
     }
 
@@ -119,6 +115,12 @@ public class UsuarioService {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
+        final Compania idUsuarioCompania = companiaRepository.findFirstByIdUsuario(usuario);
+        if (idUsuarioCompania != null) {
+            referencedWarning.setKey("usuario.compania.idUsuario.referenced");
+            referencedWarning.addParam(idUsuarioCompania.getId());
+            return referencedWarning;
+        }
         final Publicacion idUsuarioPublicacion = publicacionRepository.findFirstByIdUsuario(usuario);
         if (idUsuarioPublicacion != null) {
             referencedWarning.setKey("usuario.publicacion.idUsuario.referenced");
