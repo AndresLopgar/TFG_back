@@ -6,7 +6,6 @@ import andres.art_connect.model.CompaniaDTO;
 import andres.art_connect.repos.CompaniaRepository;
 import andres.art_connect.repos.UsuarioRepository;
 import andres.art_connect.util.NotFoundException;
-import andres.art_connect.util.ReferencedWarning;
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -60,6 +59,7 @@ public class CompaniaService {
         companiaDTO.setDescripcion(compania.getDescripcion());
         companiaDTO.setMiembros(compania.getMiembros());
         companiaDTO.setFechaCreacion(compania.getFechaCreacion());
+        companiaDTO.setIdUsuario(compania.getIdUsuario() == null ? null : compania.getIdUsuario().getId());
         return companiaDTO;
     }
 
@@ -68,24 +68,14 @@ public class CompaniaService {
         compania.setDescripcion(companiaDTO.getDescripcion());
         compania.setMiembros(companiaDTO.getMiembros());
         compania.setFechaCreacion(companiaDTO.getFechaCreacion());
+        final Usuario idUsuario = companiaDTO.getIdUsuario() == null ? null : usuarioRepository.findById(companiaDTO.getIdUsuario())
+                .orElseThrow(() -> new NotFoundException("idUsuario not found"));
+        compania.setIdUsuario(idUsuario);
         return compania;
     }
 
     public boolean nombreExists(final String nombre) {
         return companiaRepository.existsByNombreIgnoreCase(nombre);
-    }
-
-    public ReferencedWarning getReferencedWarning(final Long id) {
-        final ReferencedWarning referencedWarning = new ReferencedWarning();
-        final Compania compania = companiaRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
-        final Usuario idCompaniaUsuario = usuarioRepository.findFirstByIdCompania(compania);
-        if (idCompaniaUsuario != null) {
-            referencedWarning.setKey("compania.usuario.idCompania.referenced");
-            referencedWarning.addParam(idCompaniaUsuario.getId());
-            return referencedWarning;
-        }
-        return null;
     }
 
 }

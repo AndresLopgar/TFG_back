@@ -50,4 +50,7 @@ public class Publicacion {
     @OneToMany(mappedBy = "idPublicacion")
     private Set<Comentario> idComentario;
 
+    @OneToMany(mappedBy = "isPublicacion")
+    private Set<Comentario> idComentarioPublicacion;
+
 }

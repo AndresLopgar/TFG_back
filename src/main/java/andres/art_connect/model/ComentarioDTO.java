@@ -24,4 +24,7 @@ public class ComentarioDTO {
     @NotNull
     private Long idPublicacion;
 
+    @NotNull
+    private Long isPublicacion;
+
 }

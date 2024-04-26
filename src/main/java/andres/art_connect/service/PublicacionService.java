@@ -96,6 +96,12 @@ public class PublicacionService {
             referencedWarning.addParam(idPublicacionComentario.getId());
             return referencedWarning;
         }
+        final Comentario isPublicacionComentario = comentarioRepository.findFirstByIsPublicacion(publicacion);
+        if (isPublicacionComentario != null) {
+            referencedWarning.setKey("publicacion.comentario.isPublicacion.referenced");
+            referencedWarning.addParam(isPublicacionComentario.getId());
+            return referencedWarning;
+        }
         return null;
     }
 

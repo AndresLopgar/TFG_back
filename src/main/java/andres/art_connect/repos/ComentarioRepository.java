@@ -12,4 +12,6 @@ public interface ComentarioRepository extends JpaRepository<Comentario, Long> {
 
     Comentario findFirstByIdPublicacion(Publicacion publicacion);
 
+    Comentario findFirstByIsPublicacion(Publicacion publicacion);
+
 }

@@ -4,12 +4,14 @@ import andres.art_connect.domain.Comentario;
 import andres.art_connect.domain.Compania;
 import andres.art_connect.domain.MensajeDirecto;
 import andres.art_connect.domain.Publicacion;
+import andres.art_connect.domain.Seguidores;
 import andres.art_connect.domain.Usuario;
 import andres.art_connect.model.UsuarioDTO;
 import andres.art_connect.repos.ComentarioRepository;
 import andres.art_connect.repos.CompaniaRepository;
 import andres.art_connect.repos.MensajeDirectoRepository;
 import andres.art_connect.repos.PublicacionRepository;
+import andres.art_connect.repos.SeguidoresRepository;
 import andres.art_connect.repos.UsuarioRepository;
 import andres.art_connect.util.NotFoundException;
 import andres.art_connect.util.ReferencedWarning;
@@ -26,17 +28,20 @@ public class UsuarioService {
     private final PublicacionRepository publicacionRepository;
     private final ComentarioRepository comentarioRepository;
     private final MensajeDirectoRepository mensajeDirectoRepository;
+    private final SeguidoresRepository seguidoresRepository;
 
     public UsuarioService(final UsuarioRepository usuarioRepository,
             final CompaniaRepository companiaRepository,
             final PublicacionRepository publicacionRepository,
             final ComentarioRepository comentarioRepository,
-            final MensajeDirectoRepository mensajeDirectoRepository) {
+            final MensajeDirectoRepository mensajeDirectoRepository,
+            final SeguidoresRepository seguidoresRepository) {
         this.usuarioRepository = usuarioRepository;
         this.companiaRepository = companiaRepository;
         this.publicacionRepository = publicacionRepository;
         this.comentarioRepository = comentarioRepository;
         this.mensajeDirectoRepository = mensajeDirectoRepository;
+        this.seguidoresRepository = seguidoresRepository;
     }
 
     public List<UsuarioDTO> findAll() {
@@ -79,8 +84,7 @@ public class UsuarioService {
         usuarioDTO.setFechaRegistro(usuario.getFechaRegistro());
         usuarioDTO.setFotoPerfil(usuario.getFotoPerfil());
         usuarioDTO.setTipoUsuario(usuario.getTipoUsuario());
-        usuarioDTO.setIdSeguidor(usuario.getIdSeguidor() == null ? null : usuario.getIdSeguidor().getId());
-        usuarioDTO.setIdCompania(usuario.getIdCompania() == null ? null : usuario.getIdCompania().getId());
+        usuarioDTO.setIsSeguidor(usuario.getIsSeguidor() == null ? null : usuario.getIsSeguidor().getId());
         return usuarioDTO;
     }
 
@@ -93,12 +97,9 @@ public class UsuarioService {
         usuario.setFechaRegistro(usuarioDTO.getFechaRegistro());
         usuario.setFotoPerfil(usuarioDTO.getFotoPerfil());
         usuario.setTipoUsuario(usuarioDTO.getTipoUsuario());
-        final Usuario idSeguidor = usuarioDTO.getIdSeguidor() == null ? null : usuarioRepository.findById(usuarioDTO.getIdSeguidor())
-                .orElseThrow(() -> new NotFoundException("idSeguidor not found"));
-        usuario.setIdSeguidor(idSeguidor);
-        final Compania idCompania = usuarioDTO.getIdCompania() == null ? null : companiaRepository.findById(usuarioDTO.getIdCompania())
-                .orElseThrow(() -> new NotFoundException("idCompania not found"));
-        usuario.setIdCompania(idCompania);
+        final Usuario isSeguidor = usuarioDTO.getIsSeguidor() == null ? null : usuarioRepository.findById(usuarioDTO.getIsSeguidor())
+                .orElseThrow(() -> new NotFoundException("isSeguidor not found"));
+        usuario.setIsSeguidor(isSeguidor);
         return usuario;
     }
 
@@ -114,18 +115,14 @@ public class UsuarioService {
         return usuarioRepository.existsByCorreoElectronicoIgnoreCase(correoElectronico);
     }
 
-    public boolean idSeguidorExists(final Long id) {
-        return usuarioRepository.existsByIdSeguidorId(id);
-    }
-
     public ReferencedWarning getReferencedWarning(final Long id) {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        final Usuario idSeguidorUsuario = usuarioRepository.findFirstByIdSeguidorAndIdNot(usuario, usuario.getId());
-        if (idSeguidorUsuario != null) {
-            referencedWarning.setKey("usuario.usuario.idSeguidor.referenced");
-            referencedWarning.addParam(idSeguidorUsuario.getId());
+        final Compania idUsuarioCompania = companiaRepository.findFirstByIdUsuario(usuario);
+        if (idUsuarioCompania != null) {
+            referencedWarning.setKey("usuario.compania.idUsuario.referenced");
+            referencedWarning.addParam(idUsuarioCompania.getId());
             return referencedWarning;
         }
         final Publicacion idUsuarioPublicacion = publicacionRepository.findFirstByIdUsuario(usuario);
@@ -144,6 +141,24 @@ public class UsuarioService {
         if (idUsuarioMensajeDirecto != null) {
             referencedWarning.setKey("usuario.mensajeDirecto.idUsuario.referenced");
             referencedWarning.addParam(idUsuarioMensajeDirecto.getId());
+            return referencedWarning;
+        }
+        final Usuario isSeguidorUsuario = usuarioRepository.findFirstByIsSeguidorAndIdNot(usuario, usuario.getId());
+        if (isSeguidorUsuario != null) {
+            referencedWarning.setKey("usuario.usuario.isSeguidor.referenced");
+            referencedWarning.addParam(isSeguidorUsuario.getId());
+            return referencedWarning;
+        }
+        final Seguidores idSeguidorSeguidores = seguidoresRepository.findFirstByIdSeguidor(usuario);
+        if (idSeguidorSeguidores != null) {
+            referencedWarning.setKey("usuario.seguidores.idSeguidor.referenced");
+            referencedWarning.addParam(idSeguidorSeguidores.getId());
+            return referencedWarning;
+        }
+        final Seguidores idSeguidoSeguidores = seguidoresRepository.findFirstByIdSeguido(usuario);
+        if (idSeguidoSeguidores != null) {
+            referencedWarning.setKey("usuario.seguidores.idSeguido.referenced");
+            referencedWarning.addParam(idSeguidoSeguidores.getId());
             return referencedWarning;
         }
         return null;

@@ -26,4 +26,7 @@ public class CompaniaDTO {
 
     private LocalDateTime fechaCreacion;
 
+    @NotNull
+    private Long idUsuario;
+
 }

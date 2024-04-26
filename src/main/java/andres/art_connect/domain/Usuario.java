@@ -9,7 +9,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.util.Set;
 import lombok.Getter;
@@ -50,13 +49,8 @@ public class Usuario {
     @Column(nullable = false)
     private String tipoUsuario;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_seguidor_id", unique = true)
-    private Usuario idSeguidor;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_compania_id", nullable = false)
-    private Compania idCompania;
+    @OneToMany(mappedBy = "idUsuario")
+    private Set<Compania> idCompania;
 
     @OneToMany(mappedBy = "idUsuario")
     private Set<Publicacion> idPublicacion;
@@ -66,5 +60,15 @@ public class Usuario {
 
     @OneToMany(mappedBy = "idUsuario")
     private Set<MensajeDirecto> idMensaje;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "is_seguidor_id")
+    private Usuario isSeguidor;
+
+    @OneToMany(mappedBy = "idSeguidor")
+    private Set<Seguidores> idSeguidor;
+
+    @OneToMany(mappedBy = "idSeguido")
+    private Set<Seguidores> idSeguido;
 
 }

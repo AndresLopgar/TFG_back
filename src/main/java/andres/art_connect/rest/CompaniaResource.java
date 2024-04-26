@@ -2,8 +2,6 @@ package andres.art_connect.rest;
 
 import andres.art_connect.model.CompaniaDTO;
 import andres.art_connect.service.CompaniaService;
-import andres.art_connect.util.ReferencedException;
-import andres.art_connect.util.ReferencedWarning;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -57,10 +55,6 @@ public class CompaniaResource {
     @DeleteMapping("/{id}")
     @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> deleteCompania(@PathVariable(name = "id") final Long id) {
-        final ReferencedWarning referencedWarning = companiaService.getReferencedWarning(id);
-        if (referencedWarning != null) {
-            throw new ReferencedException(referencedWarning);
-        }
         companiaService.delete(id);
         return ResponseEntity.noContent().build();
     }
