@@ -1,24 +1,22 @@
-import { Routes} from '@angular/router';
-import { BuscarComponent } from './components/buscar/buscar.component';
-import { HomeComponent } from './components/home/home.component';
-import { LoginComponent } from './components/login/login.component';
-import { MensajesComponent } from './components/mensajes/mensajes.component';
-import { ModerarComponent } from './components/moderar/moderar.component';
-import { NotificacionesComponent } from './components/notificaciones/notificaciones.component';
-import { PerfilComponent } from './components/perfil/perfil.component';
-import { RegistroComapaniaComponent } from './components/registro-comapania/registro-comapania.component';
-import { RegistroComponent } from './components/registro/registro.component';
+import { Routes } from '@angular/router';
+import { HomeComponent } from './home/home.component';
+import { ErrorComponent } from './error/error.component';
 
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/home', pathMatch: 'full' },
-    {path: 'home', component: HomeComponent},
-    { path: 'login', component: LoginComponent },
-    {path: 'registro', component: RegistroComponent},
-    {path: 'perfil', component: PerfilComponent},
-    {path: 'buscar', component: BuscarComponent},
-    {path: 'mensajes', component: MensajesComponent},
-    {path: 'notificaciones', component: NotificacionesComponent},
-    {path: 'moderar', component: ModerarComponent},
-    {path: 'companiaRegistro', component: RegistroComapaniaComponent}
+  {
+    path: '',
+    component: HomeComponent,
+    title: $localize`:@@home.index.headline:Welcome to your new app!`
+  },
+  {
+    path: 'error',
+    component: ErrorComponent,
+    title: $localize`:@@error.headline:Error`
+  },
+  {
+    path: '**',
+    component: ErrorComponent,
+    title: $localize`:@@notFound.headline:Page not found`
+  }
 ];
