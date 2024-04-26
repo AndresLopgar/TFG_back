@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class HomeController {
 
 	@GetMapping("/")
-	@RequestMapping(value = "/{path:[^\\.]*}")
     public String index() {
         return "forward:index.html";
     }
