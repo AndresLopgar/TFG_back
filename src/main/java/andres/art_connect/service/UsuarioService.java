@@ -154,4 +154,8 @@ public class UsuarioService {
         return null;
     }
 
+    public boolean idUsarioCompaniaExists(final Long id) {
+        return usuarioRepository.existsByIdUsarioCompaniaId(id);
+    }
+
 }
