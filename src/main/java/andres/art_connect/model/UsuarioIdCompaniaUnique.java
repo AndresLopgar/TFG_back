@@ -25,22 +25,22 @@ import org.springframework.web.servlet.HandlerMapping;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Constraint(
-        validatedBy = UsuarioIdUsarioCompaniaUnique.UsuarioIdUsarioCompaniaUniqueValidator.class
+        validatedBy = UsuarioIdCompaniaUnique.UsuarioIdCompaniaUniqueValidator.class
 )
-public @interface UsuarioIdUsarioCompaniaUnique {
+public @interface UsuarioIdCompaniaUnique {
 
-    String message() default "{Exists.usuario.idUsarioCompania}";
+    String message() default "{Exists.usuario.idCompania}";
 
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
 
-    class UsuarioIdUsarioCompaniaUniqueValidator implements ConstraintValidator<UsuarioIdUsarioCompaniaUnique, Long> {
+    class UsuarioIdCompaniaUniqueValidator implements ConstraintValidator<UsuarioIdCompaniaUnique, Long> {
 
         private final UsuarioService usuarioService;
         private final HttpServletRequest request;
 
-        public UsuarioIdUsarioCompaniaUniqueValidator(final UsuarioService usuarioService,
+        public UsuarioIdCompaniaUniqueValidator(final UsuarioService usuarioService,
                 final HttpServletRequest request) {
             this.usuarioService = usuarioService;
             this.request = request;
@@ -55,11 +55,11 @@ public @interface UsuarioIdUsarioCompaniaUnique {
             @SuppressWarnings("unchecked") final Map<String, String> pathVariables =
                     ((Map<String, String>)request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE));
             final String currentId = pathVariables.get("id");
-            if (currentId != null && value.equals(usuarioService.get(Long.parseLong(currentId)).getIdUsarioCompania())) {
+            if (currentId != null && value.equals(usuarioService.get(Long.parseLong(currentId)).getIdCompania())) {
                 // value hasn't changed
                 return true;
             }
-            return !usuarioService.idUsarioCompaniaExists(value);
+            return !usuarioService.idCompaniaExists(value);
         }
 
     }

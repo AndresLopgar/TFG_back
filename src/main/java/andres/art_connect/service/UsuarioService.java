@@ -84,6 +84,7 @@ public class UsuarioService {
         usuarioDTO.setFechaRegistro(usuario.getFechaRegistro());
         usuarioDTO.setFotoPerfil(usuario.getFotoPerfil());
         usuarioDTO.setTipoUsuario(usuario.getTipoUsuario());
+        usuarioDTO.setIdCompania(usuario.getIdCompania() == null ? null : usuario.getIdCompania().getId());
         return usuarioDTO;
     }
 
@@ -96,6 +97,9 @@ public class UsuarioService {
         usuario.setFechaRegistro(usuarioDTO.getFechaRegistro());
         usuario.setFotoPerfil(usuarioDTO.getFotoPerfil());
         usuario.setTipoUsuario(usuarioDTO.getTipoUsuario());
+        final Compania idCompania = usuarioDTO.getIdCompania() == null ? null : companiaRepository.findById(usuarioDTO.getIdCompania())
+                .orElseThrow(() -> new NotFoundException("idCompania not found"));
+        usuario.setIdCompania(idCompania);
         return usuario;
     }
 
@@ -111,16 +115,14 @@ public class UsuarioService {
         return usuarioRepository.existsByCorreoElectronicoIgnoreCase(correoElectronico);
     }
 
+    public boolean idCompaniaExists(final Long id) {
+        return usuarioRepository.existsByIdCompaniaId(id);
+    }
+
     public ReferencedWarning getReferencedWarning(final Long id) {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        final Compania idUsuarioCompania = companiaRepository.findFirstByIdUsuario(usuario);
-        if (idUsuarioCompania != null) {
-            referencedWarning.setKey("usuario.compania.idUsuario.referenced");
-            referencedWarning.addParam(idUsuarioCompania.getId());
-            return referencedWarning;
-        }
         final Publicacion idUsuarioPublicacion = publicacionRepository.findFirstByIdUsuario(usuario);
         if (idUsuarioPublicacion != null) {
             referencedWarning.setKey("usuario.publicacion.idUsuario.referenced");
@@ -152,10 +154,6 @@ public class UsuarioService {
             return referencedWarning;
         }
         return null;
-    }
-
-    public boolean idUsarioCompaniaExists(final Long id) {
-        return usuarioRepository.existsByIdUsarioCompaniaId(id);
     }
 
 }

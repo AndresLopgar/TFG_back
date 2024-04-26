@@ -23,11 +23,11 @@ public class Seguidores {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_seguidor_id")
+    @JoinColumn(name = "id_seguidor_id", nullable = false)
     private Usuario idSeguidor;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_seguido_id")
+    @JoinColumn(name = "id_seguido_id", nullable = false)
     private Usuario idSeguido;
 
 }
