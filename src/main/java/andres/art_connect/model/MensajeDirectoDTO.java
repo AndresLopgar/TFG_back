@@ -13,11 +13,10 @@ public class MensajeDirectoDTO {
 
     private Long id;
 
-    @NotNull
     @Size(max = 255)
     private String contenido;
 
-    private LocalDateTime fechaContenido;
+    private LocalDateTime fechaMensaje;
 
     @NotNull
     private Long idUsuario;

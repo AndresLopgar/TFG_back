@@ -1,6 +1,6 @@
 package andres.art_connect.service;
 
-import andres.art_connect.domain.Comentario; 
+import andres.art_connect.domain.Comentario;
 import andres.art_connect.domain.Compania;
 import andres.art_connect.domain.MensajeDirecto;
 import andres.art_connect.domain.Publicacion;
@@ -13,36 +13,30 @@ import andres.art_connect.repos.PublicacionRepository;
 import andres.art_connect.repos.UsuarioRepository;
 import andres.art_connect.util.NotFoundException;
 import andres.art_connect.util.ReferencedWarning;
-import jakarta.transaction.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
 @Service
-@Transactional
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final CompaniaRepository companiaRepository;
     private final PublicacionRepository publicacionRepository;
-    private final MensajeDirectoRepository mensajeDirectoRepository;
     private final ComentarioRepository comentarioRepository;
+    private final MensajeDirectoRepository mensajeDirectoRepository;
 
     public UsuarioService(final UsuarioRepository usuarioRepository,
             final CompaniaRepository companiaRepository,
             final PublicacionRepository publicacionRepository,
-            final MensajeDirectoRepository mensajeDirectoRepository,
-            final ComentarioRepository comentarioRepository) {
+            final ComentarioRepository comentarioRepository,
+            final MensajeDirectoRepository mensajeDirectoRepository) {
         this.usuarioRepository = usuarioRepository;
         this.companiaRepository = companiaRepository;
         this.publicacionRepository = publicacionRepository;
-        this.mensajeDirectoRepository = mensajeDirectoRepository;
         this.comentarioRepository = comentarioRepository;
+        this.mensajeDirectoRepository = mensajeDirectoRepository;
     }
 
     public List<UsuarioDTO> findAll() {
@@ -59,10 +53,8 @@ public class UsuarioService {
     }
 
     public Long create(final UsuarioDTO usuarioDTO) {
-    	final Usuario usuario = new Usuario();
+        final Usuario usuario = new Usuario();
         mapToEntity(usuarioDTO, usuario);
-        usuario.setFechaRegistro(LocalDateTime.now());
-        usuario.setTipoUsuario("estandar");// Asigna la fecha de registro actual
         return usuarioRepository.save(usuario).getId();
     }
 
@@ -74,12 +66,7 @@ public class UsuarioService {
     }
 
     public void delete(final Long id) {
-        final Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(NotFoundException::new);
-        // remove many-to-many relations at owning side
-        usuarioRepository.findAllByIdSeguidor(usuario)
-                .forEach(user -> user.getIdSeguidor().remove(usuario));
-        usuarioRepository.delete(usuario);
+        usuarioRepository.deleteById(id);
     }
 
     private UsuarioDTO mapToDTO(final Usuario usuario, final UsuarioDTO usuarioDTO) {
@@ -92,10 +79,8 @@ public class UsuarioService {
         usuarioDTO.setFechaRegistro(usuario.getFechaRegistro());
         usuarioDTO.setFotoPerfil(usuario.getFotoPerfil());
         usuarioDTO.setTipoUsuario(usuario.getTipoUsuario());
-        usuarioDTO.setIdSeguidor(usuario.getIdSeguidor().stream()
-                .map(usuarioInt -> usuarioInt.getId())
-                .toList());
-        usuarioDTO.setIdUsarioCompania(usuario.getIdUsarioCompania() == null ? null : usuario.getIdUsarioCompania().getId());
+        usuarioDTO.setIdSeguidor(usuario.getIdSeguidor() == null ? null : usuario.getIdSeguidor().getId());
+        usuarioDTO.setIdCompania(usuario.getIdCompania() == null ? null : usuario.getIdCompania().getId());
         return usuarioDTO;
     }
 
@@ -108,15 +93,12 @@ public class UsuarioService {
         usuario.setFechaRegistro(usuarioDTO.getFechaRegistro());
         usuario.setFotoPerfil(usuarioDTO.getFotoPerfil());
         usuario.setTipoUsuario(usuarioDTO.getTipoUsuario());
-        final List<Usuario> idSeguidor = usuarioRepository.findAllById(
-                usuarioDTO.getIdSeguidor() == null ? Collections.emptyList() : usuarioDTO.getIdSeguidor());
-        if (idSeguidor.size() != (usuarioDTO.getIdSeguidor() == null ? 0 : usuarioDTO.getIdSeguidor().size())) {
-            throw new NotFoundException("one of idSeguidor not found");
-        }
-        usuario.setIdSeguidor(new HashSet<>(idSeguidor));
-        final Compania idUsarioCompania = usuarioDTO.getIdUsarioCompania() == null ? null : companiaRepository.findById(usuarioDTO.getIdUsarioCompania())
-                .orElseThrow(() -> new NotFoundException("idUsarioCompania not found"));
-        usuario.setIdUsarioCompania(idUsarioCompania);
+        final Usuario idSeguidor = usuarioDTO.getIdSeguidor() == null ? null : usuarioRepository.findById(usuarioDTO.getIdSeguidor())
+                .orElseThrow(() -> new NotFoundException("idSeguidor not found"));
+        usuario.setIdSeguidor(idSeguidor);
+        final Compania idCompania = usuarioDTO.getIdCompania() == null ? null : companiaRepository.findById(usuarioDTO.getIdCompania())
+                .orElseThrow(() -> new NotFoundException("idCompania not found"));
+        usuario.setIdCompania(idCompania);
         return usuario;
     }
 
@@ -132,30 +114,40 @@ public class UsuarioService {
         return usuarioRepository.existsByCorreoElectronicoIgnoreCase(correoElectronico);
     }
 
-    public boolean idUsarioCompaniaExists(final Long id) {
-        return usuarioRepository.existsByIdUsarioCompaniaId(id);
+    public boolean idSeguidorExists(final Long id) {
+        return usuarioRepository.existsByIdSeguidorId(id);
+    }
+
+    public boolean idCompaniaExists(final Long id) {
+        return usuarioRepository.existsByIdCompaniaId(id);
     }
 
     public ReferencedWarning getReferencedWarning(final Long id) {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
+        final Usuario idSeguidorUsuario = usuarioRepository.findFirstByIdSeguidorAndIdNot(usuario, usuario.getId());
+        if (idSeguidorUsuario != null) {
+            referencedWarning.setKey("usuario.usuario.idSeguidor.referenced");
+            referencedWarning.addParam(idSeguidorUsuario.getId());
+            return referencedWarning;
+        }
         final Publicacion idUsuarioPublicacion = publicacionRepository.findFirstByIdUsuario(usuario);
         if (idUsuarioPublicacion != null) {
             referencedWarning.setKey("usuario.publicacion.idUsuario.referenced");
             referencedWarning.addParam(idUsuarioPublicacion.getId());
             return referencedWarning;
         }
-        final MensajeDirecto idUsuarioMensajeDirecto = mensajeDirectoRepository.findFirstByIdUsuario(usuario);
-        if (idUsuarioMensajeDirecto != null) {
-            referencedWarning.setKey("usuario.mensajeDirecto.idUsuario.referenced");
-            referencedWarning.addParam(idUsuarioMensajeDirecto.getId());
-            return referencedWarning;
-        }
         final Comentario idUsuarioComentario = comentarioRepository.findFirstByIdUsuario(usuario);
         if (idUsuarioComentario != null) {
             referencedWarning.setKey("usuario.comentario.idUsuario.referenced");
             referencedWarning.addParam(idUsuarioComentario.getId());
+            return referencedWarning;
+        }
+        final MensajeDirecto idUsuarioMensajeDirecto = mensajeDirectoRepository.findFirstByIdUsuario(usuario);
+        if (idUsuarioMensajeDirecto != null) {
+            referencedWarning.setKey("usuario.mensajeDirecto.idUsuario.referenced");
+            referencedWarning.addParam(idUsuarioMensajeDirecto.getId());
             return referencedWarning;
         }
         return null;

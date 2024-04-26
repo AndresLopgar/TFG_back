@@ -58,6 +58,7 @@ public class CompaniaService {
         companiaDTO.setId(compania.getId());
         companiaDTO.setNombre(compania.getNombre());
         companiaDTO.setDescripcion(compania.getDescripcion());
+        companiaDTO.setMiembros(compania.getMiembros());
         companiaDTO.setFechaCreacion(compania.getFechaCreacion());
         return companiaDTO;
     }
@@ -65,6 +66,7 @@ public class CompaniaService {
     private Compania mapToEntity(final CompaniaDTO companiaDTO, final Compania compania) {
         compania.setNombre(companiaDTO.getNombre());
         compania.setDescripcion(companiaDTO.getDescripcion());
+        compania.setMiembros(companiaDTO.getMiembros());
         compania.setFechaCreacion(companiaDTO.getFechaCreacion());
         return compania;
     }
@@ -77,10 +79,10 @@ public class CompaniaService {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final Compania compania = companiaRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        final Usuario idUsarioCompaniaUsuario = usuarioRepository.findFirstByIdUsarioCompania(compania);
-        if (idUsarioCompaniaUsuario != null) {
-            referencedWarning.setKey("compania.usuario.idUsarioCompania.referenced");
-            referencedWarning.addParam(idUsarioCompaniaUsuario.getId());
+        final Usuario idCompaniaUsuario = usuarioRepository.findFirstByIdCompania(compania);
+        if (idCompaniaUsuario != null) {
+            referencedWarning.setKey("compania.usuario.idCompania.referenced");
+            referencedWarning.addParam(idCompaniaUsuario.getId());
             return referencedWarning;
         }
         return null;

@@ -4,12 +4,12 @@ import andres.art_connect.model.UsuarioDTO;
 import andres.art_connect.service.UsuarioService;
 import andres.art_connect.util.ReferencedException;
 import andres.art_connect.util.ReferencedWarning;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/usuarios", produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin("*")
 public class UsuarioResource {
 
     private final UsuarioService usuarioService;
@@ -42,6 +41,7 @@ public class UsuarioResource {
     }
 
     @PostMapping
+    @ApiResponse(responseCode = "201")
     public ResponseEntity<Long> createUsuario(@RequestBody @Valid final UsuarioDTO usuarioDTO) {
         final Long createdId = usuarioService.create(usuarioDTO);
         return new ResponseEntity<>(createdId, HttpStatus.CREATED);
@@ -55,6 +55,7 @@ public class UsuarioResource {
     }
 
     @DeleteMapping("/{id}")
+    @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> deleteUsuario(@PathVariable(name = "id") final Long id) {
         final ReferencedWarning referencedWarning = usuarioService.getReferencedWarning(id);
         if (referencedWarning != null) {

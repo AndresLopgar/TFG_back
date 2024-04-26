@@ -4,12 +4,12 @@ import andres.art_connect.model.PublicacionDTO;
 import andres.art_connect.service.PublicacionService;
 import andres.art_connect.util.ReferencedException;
 import andres.art_connect.util.ReferencedWarning;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/publicacions", produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin("*")
 public class PublicacionResource {
 
     private final PublicacionService publicacionService;
@@ -42,6 +41,7 @@ public class PublicacionResource {
     }
 
     @PostMapping
+    @ApiResponse(responseCode = "201")
     public ResponseEntity<Long> createPublicacion(
             @RequestBody @Valid final PublicacionDTO publicacionDTO) {
         final Long createdId = publicacionService.create(publicacionDTO);
@@ -56,6 +56,7 @@ public class PublicacionResource {
     }
 
     @DeleteMapping("/{id}")
+    @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> deletePublicacion(@PathVariable(name = "id") final Long id) {
         final ReferencedWarning referencedWarning = publicacionService.getReferencedWarning(id);
         if (referencedWarning != null) {

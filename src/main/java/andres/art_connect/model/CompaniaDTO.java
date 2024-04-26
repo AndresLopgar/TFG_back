@@ -21,6 +21,9 @@ public class CompaniaDTO {
     @Size(max = 255)
     private String descripcion;
 
+    @NotNull
+    private Long miembros;
+
     private LocalDateTime fechaCreacion;
 
 }

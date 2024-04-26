@@ -28,13 +28,13 @@ public class Compania {
     @Column
     private String descripcion;
 
+    @Column(nullable = false)
+    private Long miembros;
+
     @Column
     private LocalDateTime fechaCreacion;
 
-    @OneToOne(
-            mappedBy = "idUsarioCompania",
-            fetch = FetchType.LAZY
-    )
+    @OneToOne(mappedBy = "idCompania", fetch = FetchType.LAZY)
     private Usuario idUsuario;
 
 }

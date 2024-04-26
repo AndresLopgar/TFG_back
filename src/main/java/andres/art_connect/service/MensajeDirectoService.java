@@ -57,7 +57,7 @@ public class MensajeDirectoService {
             final MensajeDirectoDTO mensajeDirectoDTO) {
         mensajeDirectoDTO.setId(mensajeDirecto.getId());
         mensajeDirectoDTO.setContenido(mensajeDirecto.getContenido());
-        mensajeDirectoDTO.setFechaContenido(mensajeDirecto.getFechaContenido());
+        mensajeDirectoDTO.setFechaMensaje(mensajeDirecto.getFechaMensaje());
         mensajeDirectoDTO.setIdUsuario(mensajeDirecto.getIdUsuario() == null ? null : mensajeDirecto.getIdUsuario().getId());
         return mensajeDirectoDTO;
     }
@@ -65,7 +65,7 @@ public class MensajeDirectoService {
     private MensajeDirecto mapToEntity(final MensajeDirectoDTO mensajeDirectoDTO,
             final MensajeDirecto mensajeDirecto) {
         mensajeDirecto.setContenido(mensajeDirectoDTO.getContenido());
-        mensajeDirecto.setFechaContenido(mensajeDirectoDTO.getFechaContenido());
+        mensajeDirecto.setFechaMensaje(mensajeDirectoDTO.getFechaMensaje());
         final Usuario idUsuario = mensajeDirectoDTO.getIdUsuario() == null ? null : usuarioRepository.findById(mensajeDirectoDTO.getIdUsuario())
                 .orElseThrow(() -> new NotFoundException("idUsuario not found"));
         mensajeDirecto.setIdUsuario(idUsuario);

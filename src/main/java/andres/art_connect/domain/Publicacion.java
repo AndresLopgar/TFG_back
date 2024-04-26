@@ -48,6 +48,6 @@ public class Publicacion {
     private Usuario idUsuario;
 
     @OneToMany(mappedBy = "idPublicacion")
-    private Set<Comentario> idPublicacionComentario;
+    private Set<Comentario> idComentario;
 
 }

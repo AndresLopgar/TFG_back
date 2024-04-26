@@ -2,12 +2,12 @@ package andres.art_connect.rest;
 
 import andres.art_connect.model.MensajeDirectoDTO;
 import andres.art_connect.service.MensajeDirectoService;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/mensajeDirectos", produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin("*")
 public class MensajeDirectoResource {
 
     private final MensajeDirectoService mensajeDirectoService;
@@ -41,6 +40,7 @@ public class MensajeDirectoResource {
     }
 
     @PostMapping
+    @ApiResponse(responseCode = "201")
     public ResponseEntity<Long> createMensajeDirecto(
             @RequestBody @Valid final MensajeDirectoDTO mensajeDirectoDTO) {
         final Long createdId = mensajeDirectoService.create(mensajeDirectoDTO);
@@ -55,6 +55,7 @@ public class MensajeDirectoResource {
     }
 
     @DeleteMapping("/{id}")
+    @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> deleteMensajeDirecto(@PathVariable(name = "id") final Long id) {
         mensajeDirectoService.delete(id);
         return ResponseEntity.noContent().build();

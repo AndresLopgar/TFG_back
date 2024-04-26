@@ -3,7 +3,6 @@ package andres.art_connect.model;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -45,9 +44,11 @@ public class UsuarioDTO {
     @Size(max = 255)
     private String tipoUsuario;
 
-    private List<Long> idSeguidor;
+    @UsuarioIdSeguidorUnique
+    private Long idSeguidor;
 
-    @UsuarioIdUsarioCompaniaUnique
-    private Long idUsarioCompania;
+    @NotNull
+    @UsuarioIdCompaniaUnique
+    private Long idCompania;
 
 }

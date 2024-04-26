@@ -7,8 +7,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
@@ -51,28 +49,24 @@ public class Usuario {
     @Column(nullable = false)
     private String tipoUsuario;
 
-    @OneToMany(mappedBy = "idUsuario")
-    private Set<Publicacion> idUsuarioPublicacion;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_seguidor_id", unique = true)
+    private Usuario idSeguidor;
 
-    @ManyToMany
-    @JoinTable(
-            name = "Seguidores",
-            joinColumns = @JoinColumn(name = "idSeguidoId"),
-            inverseJoinColumns = @JoinColumn(name = "idSeguidorId")
-    )
-    private Set<Usuario> idSeguidor;
-
-    @ManyToMany(mappedBy = "idSeguidor")
-    private Set<Usuario> idSeguido;
-
-    @OneToMany(mappedBy = "idUsuario")
-    private Set<MensajeDirecto> idUsuarioMensaje;
+    @OneToOne(mappedBy = "idSeguidor", fetch = FetchType.LAZY)
+    private Usuario idSeguido;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usario_compania_id", unique = true)
-    private Compania idUsarioCompania;
+    @JoinColumn(name = "id_compania_id", nullable = false, unique = true)
+    private Compania idCompania;
 
     @OneToMany(mappedBy = "idUsuario")
-    private Set<Comentario> idUsuarioComentario;
+    private Set<Publicacion> idPublicacion;
+
+    @OneToMany(mappedBy = "idUsuario")
+    private Set<Comentario> idComentario;
+
+    @OneToMany(mappedBy = "idUsuario")
+    private Set<MensajeDirecto> idMensaje;
 
 }
