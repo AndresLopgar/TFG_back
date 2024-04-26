@@ -12,7 +12,7 @@ public class HomeController {
 	@GetMapping("/")
 	@RequestMapping(value = "/{path:[^\\.]*}")
     public String index() {
-        return "forward:/index.html";
+        return "forward:index.html";
     }
     
     
