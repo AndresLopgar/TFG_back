@@ -1,33 +1,17 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavigationStart, Router, RouterLink, RouterOutlet } from '@angular/router';
-import { HeaderComponent } from 'app/common/header/header.component';
-
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { RouterOutlet } from '@angular/router';
+import { CabeceraComponent } from './layout/cabecera/cabecera.component';
+import { PieComponent } from './layout/pie/pie.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, HeaderComponent],
+  imports: [RouterOutlet, CommonModule, HttpClientModule, CabeceraComponent, PieComponent],
+  providers:[HttpClient],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
+export class AppComponent{}
 
-  router = inject(Router);
-
-  msgSuccess = null;
-  msgInfo = null;
-  msgError = null;
-
-  ngOnInit() {
-    this.router.events.subscribe((event) => {
-      if (event instanceof NavigationStart) {
-        const navigationState = this.router.getCurrentNavigation()?.extras.state;
-        this.msgSuccess = navigationState?.['msgSuccess'] || null;
-        this.msgInfo = navigationState?.['msgInfo'] || null;
-        this.msgError = navigationState?.['msgError'] || null;
-      }
-    });
-  }
-
-}
