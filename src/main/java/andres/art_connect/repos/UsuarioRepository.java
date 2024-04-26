@@ -19,6 +19,4 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
     boolean existsByIdSeguidorId(Long id);
 
-    boolean existsByIdCompaniaId(Long id);
-
 }

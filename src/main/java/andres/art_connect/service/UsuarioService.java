@@ -118,10 +118,6 @@ public class UsuarioService {
         return usuarioRepository.existsByIdSeguidorId(id);
     }
 
-    public boolean idCompaniaExists(final Long id) {
-        return usuarioRepository.existsByIdCompaniaId(id);
-    }
-
     public ReferencedWarning getReferencedWarning(final Long id) {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final Usuario usuario = usuarioRepository.findById(id)

@@ -48,7 +48,6 @@ public class UsuarioDTO {
     private Long idSeguidor;
 
     @NotNull
-    @UsuarioIdCompaniaUnique
     private Long idCompania;
 
 }

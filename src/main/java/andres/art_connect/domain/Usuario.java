@@ -7,6 +7,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
@@ -53,11 +54,8 @@ public class Usuario {
     @JoinColumn(name = "id_seguidor_id", unique = true)
     private Usuario idSeguidor;
 
-    @OneToOne(mappedBy = "idSeguidor", fetch = FetchType.LAZY)
-    private Usuario idSeguido;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_compania_id", nullable = false, unique = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_compania_id", nullable = false)
     private Compania idCompania;
 
     @OneToMany(mappedBy = "idUsuario")
