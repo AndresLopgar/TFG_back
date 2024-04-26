@@ -79,10 +79,10 @@ public class CompaniaService {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final Compania compania = companiaRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        final Usuario idCompaniaUsuario = usuarioRepository.findFirstByIdCompania(compania);
-        if (idCompaniaUsuario != null) {
-            referencedWarning.setKey("compania.usuario.idCompania.referenced");
-            referencedWarning.addParam(idCompaniaUsuario.getId());
+        final Usuario idComapaniaUsuario = usuarioRepository.findFirstByIdComapania(compania);
+        if (idComapaniaUsuario != null) {
+            referencedWarning.setKey("compania.usuario.idComapania.referenced");
+            referencedWarning.addParam(idComapaniaUsuario.getId());
             return referencedWarning;
         }
         return null;

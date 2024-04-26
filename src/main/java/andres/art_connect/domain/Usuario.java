@@ -7,8 +7,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.util.Set;
 import lombok.Getter;
@@ -49,9 +49,9 @@ public class Usuario {
     @Column(nullable = false)
     private String tipoUsuario;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_compania_id", nullable = false)
-    private Compania idCompania;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_comapania_id", nullable = false, unique = true)
+    private Compania idComapania;
 
     @OneToMany(mappedBy = "idUsuario")
     private Set<Publicacion> idPublicacion;

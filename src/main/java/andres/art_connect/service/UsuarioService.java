@@ -84,7 +84,7 @@ public class UsuarioService {
         usuarioDTO.setFechaRegistro(usuario.getFechaRegistro());
         usuarioDTO.setFotoPerfil(usuario.getFotoPerfil());
         usuarioDTO.setTipoUsuario(usuario.getTipoUsuario());
-        usuarioDTO.setIdCompania(usuario.getIdCompania() == null ? null : usuario.getIdCompania().getId());
+        usuarioDTO.setIdComapania(usuario.getIdComapania() == null ? null : usuario.getIdComapania().getId());
         return usuarioDTO;
     }
 
@@ -97,9 +97,9 @@ public class UsuarioService {
         usuario.setFechaRegistro(usuarioDTO.getFechaRegistro());
         usuario.setFotoPerfil(usuarioDTO.getFotoPerfil());
         usuario.setTipoUsuario(usuarioDTO.getTipoUsuario());
-        final Compania idCompania = usuarioDTO.getIdCompania() == null ? null : companiaRepository.findById(usuarioDTO.getIdCompania())
-                .orElseThrow(() -> new NotFoundException("idCompania not found"));
-        usuario.setIdCompania(idCompania);
+        final Compania idComapania = usuarioDTO.getIdComapania() == null ? null : companiaRepository.findById(usuarioDTO.getIdComapania())
+                .orElseThrow(() -> new NotFoundException("idComapania not found"));
+        usuario.setIdComapania(idComapania);
         return usuario;
     }
 
@@ -113,6 +113,10 @@ public class UsuarioService {
 
     public boolean correoElectronicoExists(final String correoElectronico) {
         return usuarioRepository.existsByCorreoElectronicoIgnoreCase(correoElectronico);
+    }
+
+    public boolean idComapaniaExists(final Long id) {
+        return usuarioRepository.existsByIdComapaniaId(id);
     }
 
     public ReferencedWarning getReferencedWarning(final Long id) {

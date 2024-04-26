@@ -7,12 +7,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
-    Usuario findFirstByIdCompania(Compania compania);
+    Usuario findFirstByIdComapania(Compania compania);
 
     boolean existsByNombreIgnoreCase(String nombre);
 
     boolean existsByContrasenaIgnoreCase(String contrasena);
 
     boolean existsByCorreoElectronicoIgnoreCase(String correoElectronico);
+
+    boolean existsByIdComapaniaId(Long id);
 
 }
