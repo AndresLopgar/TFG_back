@@ -31,6 +31,9 @@ public class Compania {
 
     @Column(nullable = false)
     private Long miembros;
+    
+    @Column
+    private String ubicacion;
 
     @Column
     private LocalDateTime fechaCreacion;
