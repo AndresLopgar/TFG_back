@@ -23,14 +23,14 @@ public class MensajeDirecto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String contenido;
 
     @Column
-    private LocalDateTime fechaMensaje;
+    private LocalDateTime fechaContenido;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usuario_id", nullable = false)
+    @JoinColumn(name = "id_usuario_id")
     private Usuario idUsuario;
 
 }

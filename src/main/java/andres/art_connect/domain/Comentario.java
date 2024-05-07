@@ -8,7 +8,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -27,18 +26,14 @@ public class Comentario {
     private String contenido;
 
     @Column
-    private LocalDateTime fechaComentario;
+    private String fechaComentario;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usuario_id", nullable = false)
+    @JoinColumn(name = "id_usuario_id")
     private Usuario idUsuario;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_publicacion_id", nullable = false)
+    @JoinColumn(name = "id_publicacion_id")
     private Publicacion idPublicacion;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "is_publicacion_id", nullable = false)
-    private Publicacion isPublicacion;
 
 }

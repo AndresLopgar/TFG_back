@@ -1,6 +1,5 @@
 package andres.art_connect.model;
 
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import lombok.Getter;
@@ -28,7 +27,6 @@ public class PublicacionDTO {
 
     private Long numMeGustas;
 
-    @NotNull
     private Long idUsuario;
 
 }

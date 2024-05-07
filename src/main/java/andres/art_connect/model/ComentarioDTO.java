@@ -1,8 +1,6 @@
 package andres.art_connect.model;
 
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,15 +14,11 @@ public class ComentarioDTO {
     @Size(max = 255)
     private String contenido;
 
-    private LocalDateTime fechaComentario;
+    @Size(max = 255)
+    private String fechaComentario;
 
-    @NotNull
     private Long idUsuario;
 
-    @NotNull
     private Long idPublicacion;
-
-    @NotNull
-    private Long isPublicacion;
 
 }

@@ -15,7 +15,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Seguidores {
+public class Amistad {
 
     @Id
     @Column(nullable = false, updatable = false)
@@ -23,11 +23,11 @@ public class Seguidores {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_seguidor_id", nullable = false)
+    @JoinColumn(name = "id_seguidor_id")
     private Usuario idSeguidor;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_seguido_id", nullable = false)
+    @JoinColumn(name = "id_seguido_id")
     private Usuario idSeguido;
 
 }

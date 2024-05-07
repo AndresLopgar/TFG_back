@@ -29,17 +29,11 @@ public class Compania {
     @Column
     private String descripcion;
 
-    @Column(nullable = false)
-    private Long miembros;
-    
-    @Column
-    private String ubicacion;
-
     @Column
     private LocalDateTime fechaCreacion;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usuario_id", nullable = false)
+    @JoinColumn(name = "id_usuario_id")
     private Usuario idUsuario;
 
 }
