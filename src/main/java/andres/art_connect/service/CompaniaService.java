@@ -57,7 +57,6 @@ public class CompaniaService {
         companiaDTO.setId(compania.getId());
         companiaDTO.setNombre(compania.getNombre());
         companiaDTO.setDescripcion(compania.getDescripcion());
-        companiaDTO.setMiembros(compania.getMiembros());
         companiaDTO.setFechaCreacion(compania.getFechaCreacion());
         companiaDTO.setIdUsuario(compania.getIdUsuario() == null ? null : compania.getIdUsuario().getId());
         return companiaDTO;
@@ -66,7 +65,6 @@ public class CompaniaService {
     private Compania mapToEntity(final CompaniaDTO companiaDTO, final Compania compania) {
         compania.setNombre(companiaDTO.getNombre());
         compania.setDescripcion(companiaDTO.getDescripcion());
-        compania.setMiembros(companiaDTO.getMiembros());
         compania.setFechaCreacion(companiaDTO.getFechaCreacion());
         final Usuario idUsuario = companiaDTO.getIdUsuario() == null ? null : usuarioRepository.findById(companiaDTO.getIdUsuario())
                 .orElseThrow(() -> new NotFoundException("idUsuario not found"));

@@ -47,21 +47,21 @@ public class Usuario {
     private String tipoUsuario;
 
     @OneToMany(mappedBy = "idUsuario")
-    private Set<Compania> idCompania;
+    private Set<Publicacion> idUsuarioPublicacion;
 
     @OneToMany(mappedBy = "idUsuario")
-    private Set<Publicacion> idPublicacion;
+    private Set<MensajeDirecto> idUsuarioMensaje;
 
     @OneToMany(mappedBy = "idUsuario")
-    private Set<Comentario> idComentario;
+    private Set<Compania> idUsarioCompania;
 
     @OneToMany(mappedBy = "idUsuario")
-    private Set<MensajeDirecto> idMensaje;
+    private Set<Comentario> idUsuarioComentario;
 
     @OneToMany(mappedBy = "idSeguidor")
-    private Set<Seguidores> idSeguidor;
+    private Set<Amistad> idSeguidor;
 
     @OneToMany(mappedBy = "idSeguido")
-    private Set<Seguidores> idSeguido;
+    private Set<Amistad> idSeguido;
 
 }

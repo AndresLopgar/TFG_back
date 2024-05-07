@@ -44,13 +44,10 @@ public class Publicacion {
     private Long numMeGustas;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usuario_id", nullable = false)
+    @JoinColumn(name = "id_usuario_id")
     private Usuario idUsuario;
 
     @OneToMany(mappedBy = "idPublicacion")
-    private Set<Comentario> idComentario;
-
-    @OneToMany(mappedBy = "isPublicacion")
-    private Set<Comentario> idComentarioPublicacion;
+    private Set<Comentario> idPublicacionComentario;
 
 }

@@ -64,7 +64,6 @@ public class ComentarioService {
         comentarioDTO.setFechaComentario(comentario.getFechaComentario());
         comentarioDTO.setIdUsuario(comentario.getIdUsuario() == null ? null : comentario.getIdUsuario().getId());
         comentarioDTO.setIdPublicacion(comentario.getIdPublicacion() == null ? null : comentario.getIdPublicacion().getId());
-        comentarioDTO.setIsPublicacion(comentario.getIsPublicacion() == null ? null : comentario.getIsPublicacion().getId());
         return comentarioDTO;
     }
 
@@ -77,9 +76,6 @@ public class ComentarioService {
         final Publicacion idPublicacion = comentarioDTO.getIdPublicacion() == null ? null : publicacionRepository.findById(comentarioDTO.getIdPublicacion())
                 .orElseThrow(() -> new NotFoundException("idPublicacion not found"));
         comentario.setIdPublicacion(idPublicacion);
-        final Publicacion isPublicacion = comentarioDTO.getIsPublicacion() == null ? null : publicacionRepository.findById(comentarioDTO.getIsPublicacion())
-                .orElseThrow(() -> new NotFoundException("isPublicacion not found"));
-        comentario.setIsPublicacion(isPublicacion);
         return comentario;
     }
 

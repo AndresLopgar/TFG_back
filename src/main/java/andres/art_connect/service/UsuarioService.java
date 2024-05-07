@@ -1,17 +1,17 @@
 package andres.art_connect.service;
 
+import andres.art_connect.domain.Amistad;
 import andres.art_connect.domain.Comentario;
 import andres.art_connect.domain.Compania;
 import andres.art_connect.domain.MensajeDirecto;
 import andres.art_connect.domain.Publicacion;
-import andres.art_connect.domain.Seguidores;
 import andres.art_connect.domain.Usuario;
 import andres.art_connect.model.UsuarioDTO;
+import andres.art_connect.repos.AmistadRepository;
 import andres.art_connect.repos.ComentarioRepository;
 import andres.art_connect.repos.CompaniaRepository;
 import andres.art_connect.repos.MensajeDirectoRepository;
 import andres.art_connect.repos.PublicacionRepository;
-import andres.art_connect.repos.SeguidoresRepository;
 import andres.art_connect.repos.UsuarioRepository;
 import andres.art_connect.util.NotFoundException;
 import andres.art_connect.util.ReferencedWarning;
@@ -24,24 +24,24 @@ import org.springframework.stereotype.Service;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
-    private final CompaniaRepository companiaRepository;
     private final PublicacionRepository publicacionRepository;
-    private final ComentarioRepository comentarioRepository;
     private final MensajeDirectoRepository mensajeDirectoRepository;
-    private final SeguidoresRepository seguidoresRepository;
+    private final CompaniaRepository companiaRepository;
+    private final ComentarioRepository comentarioRepository;
+    private final AmistadRepository amistadRepository;
 
     public UsuarioService(final UsuarioRepository usuarioRepository,
-            final CompaniaRepository companiaRepository,
             final PublicacionRepository publicacionRepository,
-            final ComentarioRepository comentarioRepository,
             final MensajeDirectoRepository mensajeDirectoRepository,
-            final SeguidoresRepository seguidoresRepository) {
+            final CompaniaRepository companiaRepository,
+            final ComentarioRepository comentarioRepository,
+            final AmistadRepository amistadRepository) {
         this.usuarioRepository = usuarioRepository;
-        this.companiaRepository = companiaRepository;
         this.publicacionRepository = publicacionRepository;
-        this.comentarioRepository = comentarioRepository;
         this.mensajeDirectoRepository = mensajeDirectoRepository;
-        this.seguidoresRepository = seguidoresRepository;
+        this.companiaRepository = companiaRepository;
+        this.comentarioRepository = comentarioRepository;
+        this.amistadRepository = amistadRepository;
     }
 
     public List<UsuarioDTO> findAll() {
@@ -115,22 +115,10 @@ public class UsuarioService {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
         final Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
-        final Compania idUsuarioCompania = companiaRepository.findFirstByIdUsuario(usuario);
-        if (idUsuarioCompania != null) {
-            referencedWarning.setKey("usuario.compania.idUsuario.referenced");
-            referencedWarning.addParam(idUsuarioCompania.getId());
-            return referencedWarning;
-        }
         final Publicacion idUsuarioPublicacion = publicacionRepository.findFirstByIdUsuario(usuario);
         if (idUsuarioPublicacion != null) {
             referencedWarning.setKey("usuario.publicacion.idUsuario.referenced");
             referencedWarning.addParam(idUsuarioPublicacion.getId());
-            return referencedWarning;
-        }
-        final Comentario idUsuarioComentario = comentarioRepository.findFirstByIdUsuario(usuario);
-        if (idUsuarioComentario != null) {
-            referencedWarning.setKey("usuario.comentario.idUsuario.referenced");
-            referencedWarning.addParam(idUsuarioComentario.getId());
             return referencedWarning;
         }
         final MensajeDirecto idUsuarioMensajeDirecto = mensajeDirectoRepository.findFirstByIdUsuario(usuario);
@@ -139,16 +127,28 @@ public class UsuarioService {
             referencedWarning.addParam(idUsuarioMensajeDirecto.getId());
             return referencedWarning;
         }
-        final Seguidores idSeguidorSeguidores = seguidoresRepository.findFirstByIdSeguidor(usuario);
-        if (idSeguidorSeguidores != null) {
-            referencedWarning.setKey("usuario.seguidores.idSeguidor.referenced");
-            referencedWarning.addParam(idSeguidorSeguidores.getId());
+        final Compania idUsuarioCompania = companiaRepository.findFirstByIdUsuario(usuario);
+        if (idUsuarioCompania != null) {
+            referencedWarning.setKey("usuario.compania.idUsuario.referenced");
+            referencedWarning.addParam(idUsuarioCompania.getId());
             return referencedWarning;
         }
-        final Seguidores idSeguidoSeguidores = seguidoresRepository.findFirstByIdSeguido(usuario);
-        if (idSeguidoSeguidores != null) {
-            referencedWarning.setKey("usuario.seguidores.idSeguido.referenced");
-            referencedWarning.addParam(idSeguidoSeguidores.getId());
+        final Comentario idUsuarioComentario = comentarioRepository.findFirstByIdUsuario(usuario);
+        if (idUsuarioComentario != null) {
+            referencedWarning.setKey("usuario.comentario.idUsuario.referenced");
+            referencedWarning.addParam(idUsuarioComentario.getId());
+            return referencedWarning;
+        }
+        final Amistad idSeguidorAmistad = amistadRepository.findFirstByIdSeguidor(usuario);
+        if (idSeguidorAmistad != null) {
+            referencedWarning.setKey("usuario.amistad.idSeguidor.referenced");
+            referencedWarning.addParam(idSeguidorAmistad.getId());
+            return referencedWarning;
+        }
+        final Amistad idSeguidoAmistad = amistadRepository.findFirstByIdSeguido(usuario);
+        if (idSeguidoAmistad != null) {
+            referencedWarning.setKey("usuario.amistad.idSeguido.referenced");
+            referencedWarning.addParam(idSeguidoAmistad.getId());
             return referencedWarning;
         }
         return null;
