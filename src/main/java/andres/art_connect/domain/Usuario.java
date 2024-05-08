@@ -46,6 +46,9 @@ public class Usuario {
     @Column(nullable = false)
     private String tipoUsuario;
 
+    @Column
+    private Long companiaSeguida;
+
     @OneToMany(mappedBy = "idUsuario")
     private Set<Publicacion> idUsuarioPublicacion;
 
@@ -53,7 +56,7 @@ public class Usuario {
     private Set<MensajeDirecto> idUsuarioMensaje;
 
     @OneToMany(mappedBy = "idCreador")
-    private Set<Compania> idUsarioCompania;
+    private Set<Compania> idCompania;
 
     @OneToMany(mappedBy = "idUsuario")
     private Set<Comentario> idUsuarioComentario;

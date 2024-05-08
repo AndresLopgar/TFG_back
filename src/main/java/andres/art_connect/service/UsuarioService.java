@@ -84,6 +84,7 @@ public class UsuarioService {
         usuarioDTO.setFechaRegistro(usuario.getFechaRegistro());
         usuarioDTO.setFotoPerfil(usuario.getFotoPerfil());
         usuarioDTO.setTipoUsuario(usuario.getTipoUsuario());
+        usuarioDTO.setCompaniaSeguida(usuario.getCompaniaSeguida());
         return usuarioDTO;
     }
 
@@ -96,6 +97,7 @@ public class UsuarioService {
         usuario.setFechaRegistro(usuarioDTO.getFechaRegistro());
         usuario.setFotoPerfil(usuarioDTO.getFotoPerfil());
         usuario.setTipoUsuario(usuarioDTO.getTipoUsuario());
+        usuario.setCompaniaSeguida(usuarioDTO.getCompaniaSeguida());
         return usuario;
     }
 

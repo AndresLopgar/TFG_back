@@ -7,9 +7,6 @@ import andres.art_connect.repos.CompaniaRepository;
 import andres.art_connect.repos.UsuarioRepository;
 import andres.art_connect.util.NotFoundException;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -55,22 +52,8 @@ public class CompaniaService {
     public void delete(final Long id) {
         companiaRepository.deleteById(id);
     }
-    
-    public CompaniaDTO getCompaniaByCreatorId(Long userId) {
-        Optional<Usuario> usuarioOptional = usuarioRepository.findById(userId);
-        if (usuarioOptional.isEmpty()) {
-            throw new NotFoundException("Usuario not found for id: " + userId);
-        }
-        Usuario usuario = usuarioOptional.get();
 
-        Compania compania = companiaRepository.findFirstByIdCreador(usuario);
-        if (compania == null) {
-            throw new NotFoundException("Compania not found for creator id: " + userId);
-        }
-        return mapToDTO(compania, new CompaniaDTO());
-    }
-
-    private CompaniaDTO mapToDTO(Compania compania, CompaniaDTO companiaDTO) {
+    private CompaniaDTO mapToDTO(final Compania compania, final CompaniaDTO companiaDTO) {
         companiaDTO.setId(compania.getId());
         companiaDTO.setNombre(compania.getNombre());
         companiaDTO.setDescripcion(compania.getDescripcion());
@@ -96,4 +79,5 @@ public class CompaniaService {
     public boolean nombreExists(final String nombre) {
         return companiaRepository.existsByNombreIgnoreCase(nombre);
     }
+
 }
