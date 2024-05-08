@@ -79,5 +79,13 @@ public class CompaniaService {
     public boolean nombreExists(final String nombre) {
         return companiaRepository.existsByNombreIgnoreCase(nombre);
     }
+    
+    public CompaniaDTO findByCreator(Usuario usuario) {
+        Compania compania = companiaRepository.findFirstByIdCreador(usuario);
+        if (compania == null) {
+            throw new NotFoundException("No se encontró ninguna compañía creada por este usuario.");
+        }
+        return mapToDTO(compania, new CompaniaDTO());
+    }
 
 }
