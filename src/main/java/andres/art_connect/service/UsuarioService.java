@@ -112,6 +112,15 @@ public class UsuarioService {
     public boolean correoElectronicoExists(final String correoElectronico) {
         return usuarioRepository.existsByCorreoElectronicoIgnoreCase(correoElectronico);
     }
+    
+    public void updateCompaniaSeguida(Long userId, Long nuevaCompaniaSeguida) {
+        Usuario usuario = usuarioRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado con ID: " + userId));
+
+        usuario.setCompaniaSeguida(nuevaCompaniaSeguida);
+        usuarioRepository.save(usuario);
+    }
+
 
     public ReferencedWarning getReferencedWarning(final Long id) {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
