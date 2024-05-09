@@ -87,5 +87,17 @@ public class CompaniaService {
         }
         return mapToDTO(compania, new CompaniaDTO());
     }
+    
+    public void updateMiembros(Long id, Long newMiembros) {
+        Compania compania = companiaRepository.findById(id)
+                .orElseThrow(NotFoundException::new);
+
+        // Actualizar el atributo miembros
+        compania.setMiembros(newMiembros);
+
+        // Guardar la compañía actualizada en la base de datos
+        companiaRepository.save(compania);
+    }
+
 
 }

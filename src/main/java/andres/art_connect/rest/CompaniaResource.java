@@ -69,5 +69,13 @@ public class CompaniaResource {
         CompaniaDTO companiaDTO = companiaService.findByCreator(creador);
         return ResponseEntity.ok(companiaDTO);
     }
+    
+    @PutMapping("/updateMiembros/{id}")
+    public ResponseEntity<Long> updateMiembrosCompania(@PathVariable(name = "id") final Long id,
+            @RequestBody final Long nuevosMiembros) {
+        companiaService.updateMiembros(id, nuevosMiembros);
+        return ResponseEntity.ok(id);
+    }
+
 
 }
