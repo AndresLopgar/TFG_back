@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping(value = "/api/amistads", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/amistades", produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin("*")
 public class AmistadResource {
 
     private final AmistadService amistadService;
@@ -29,7 +31,7 @@ public class AmistadResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<AmistadDTO>> getAllAmistads() {
+    public ResponseEntity<List<AmistadDTO>> getAllAmistades() {
         return ResponseEntity.ok(amistadService.findAll());
     }
 
@@ -45,18 +47,29 @@ public class AmistadResource {
         return new ResponseEntity<>(createdId, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Long> updateAmistad(@PathVariable(name = "id") final Long id,
             @RequestBody @Valid final AmistadDTO amistadDTO) {
         amistadService.update(id, amistadDTO);
         return ResponseEntity.ok(id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> deleteAmistad(@PathVariable(name = "id") final Long id) {
         amistadService.delete(id);
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/seguidor/{idSeguidor}")
+    public ResponseEntity<List<AmistadDTO>> getAmistadesBySeguidor(@PathVariable(name = "idSeguidor") final Long idSeguidor) {
+        List<AmistadDTO> amistades = amistadService.findBySeguidor(idSeguidor);
+        return ResponseEntity.ok(amistades);
+    }
+
+    @GetMapping("/seguido/{idSeguido}")
+    public ResponseEntity<List<AmistadDTO>> getAmistadesBySeguido(@PathVariable(name = "idSeguido") final Long idSeguido) {
+        List<AmistadDTO> amistades = amistadService.findBySeguido(idSeguido);
+        return ResponseEntity.ok(amistades);
+    }
 }
