@@ -27,10 +27,13 @@ public class MensajeDirecto {
     private String contenido;
 
     @Column
-    private LocalDateTime fechaContenido;
+    private LocalDateTime FechaEnvio;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_usuario_id")
-    private Usuario idUsuario;
+    @JoinColumn(name = "remite_usuario_id", nullable = false)
+    private Usuario remiteUsuario;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "destino_usuario_id", nullable = false)
+    private Usuario destinoUsuario;
 }

@@ -6,6 +6,7 @@ import andres.art_connect.model.MensajeDirectoDTO;
 import andres.art_connect.repos.MensajeDirectoRepository;
 import andres.art_connect.repos.UsuarioRepository;
 import andres.art_connect.util.NotFoundException;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -24,28 +25,31 @@ public class MensajeDirectoService {
     }
 
     public List<MensajeDirectoDTO> findAll() {
-        final List<MensajeDirecto> mensajeDirectoes = mensajeDirectoRepository.findAll(Sort.by("id"));
-        return mensajeDirectoes.stream()
-                .map(mensajeDirecto -> mapToDTO(mensajeDirecto, new MensajeDirectoDTO()))
+        final List<MensajeDirecto> mensajesDirectos = mensajeDirectoRepository.findAll(Sort.by("fechaEnvio"));
+        return mensajesDirectos.stream()
+                .map(this::mapToDTO)
                 .toList();
     }
 
     public MensajeDirectoDTO get(final Long id) {
-        return mensajeDirectoRepository.findById(id)
-                .map(mensajeDirecto -> mapToDTO(mensajeDirecto, new MensajeDirectoDTO()))
+        MensajeDirecto mensajeDirecto = mensajeDirectoRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
+        return mapToDTO(mensajeDirecto);
     }
 
     public Long create(final MensajeDirectoDTO mensajeDirectoDTO) {
-        final MensajeDirecto mensajeDirecto = new MensajeDirecto();
+        MensajeDirecto mensajeDirecto = new MensajeDirecto();
         mapToEntity(mensajeDirectoDTO, mensajeDirecto);
-        return mensajeDirectoRepository.save(mensajeDirecto).getId();
+        mensajeDirecto.setFechaEnvio(LocalDateTime.now()); // Se establece la fecha y hora de envío actual
+        mensajeDirecto = mensajeDirectoRepository.save(mensajeDirecto);
+        return mensajeDirecto.getId();
     }
 
     public void update(final Long id, final MensajeDirectoDTO mensajeDirectoDTO) {
-        final MensajeDirecto mensajeDirecto = mensajeDirectoRepository.findById(id)
+        MensajeDirecto mensajeDirecto = mensajeDirectoRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
         mapToEntity(mensajeDirectoDTO, mensajeDirecto);
+        mensajeDirecto.setFechaEnvio(LocalDateTime.now()); // Se actualiza la fecha y hora de envío al momento de la actualización
         mensajeDirectoRepository.save(mensajeDirecto);
     }
 
@@ -53,23 +57,23 @@ public class MensajeDirectoService {
         mensajeDirectoRepository.deleteById(id);
     }
 
-    private MensajeDirectoDTO mapToDTO(final MensajeDirecto mensajeDirecto,
-            final MensajeDirectoDTO mensajeDirectoDTO) {
+    private MensajeDirectoDTO mapToDTO(final MensajeDirecto mensajeDirecto) {
+        MensajeDirectoDTO mensajeDirectoDTO = new MensajeDirectoDTO();
         mensajeDirectoDTO.setId(mensajeDirecto.getId());
         mensajeDirectoDTO.setContenido(mensajeDirecto.getContenido());
-        mensajeDirectoDTO.setFechaContenido(mensajeDirecto.getFechaContenido());
-        mensajeDirectoDTO.setIdUsuario(mensajeDirecto.getIdUsuario() == null ? null : mensajeDirecto.getIdUsuario().getId());
+        mensajeDirectoDTO.setFechaEnvio(mensajeDirecto.getFechaEnvio());
+        mensajeDirectoDTO.setRemiteUsuarioId(mensajeDirecto.getRemiteUsuario().getId());
+        mensajeDirectoDTO.setDestinoUsuarioId(mensajeDirecto.getDestinoUsuario().getId());
         return mensajeDirectoDTO;
     }
 
-    private MensajeDirecto mapToEntity(final MensajeDirectoDTO mensajeDirectoDTO,
-            final MensajeDirecto mensajeDirecto) {
+    private void mapToEntity(final MensajeDirectoDTO mensajeDirectoDTO, final MensajeDirecto mensajeDirecto) {
         mensajeDirecto.setContenido(mensajeDirectoDTO.getContenido());
-        mensajeDirecto.setFechaContenido(mensajeDirectoDTO.getFechaContenido());
-        final Usuario idUsuario = mensajeDirectoDTO.getIdUsuario() == null ? null : usuarioRepository.findById(mensajeDirectoDTO.getIdUsuario())
-                .orElseThrow(() -> new NotFoundException("idUsuario not found"));
-        mensajeDirecto.setIdUsuario(idUsuario);
-        return mensajeDirecto;
+        Usuario remitente = usuarioRepository.findById(mensajeDirectoDTO.getRemiteUsuarioId())
+                .orElseThrow(() -> new NotFoundException("Usuario remitente no encontrado"));
+        mensajeDirecto.setRemiteUsuario(remitente);
+        Usuario destinatario = usuarioRepository.findById(mensajeDirectoDTO.getDestinoUsuarioId())
+                .orElseThrow(() -> new NotFoundException("Usuario destinatario no encontrado"));
+        mensajeDirecto.setDestinoUsuario(destinatario);
     }
-
 }

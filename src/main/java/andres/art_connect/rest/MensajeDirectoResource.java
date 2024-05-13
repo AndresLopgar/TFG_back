@@ -47,14 +47,14 @@ public class MensajeDirectoResource {
         return new ResponseEntity<>(createdId, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Long> updateMensajeDirecto(@PathVariable(name = "id") final Long id,
             @RequestBody @Valid final MensajeDirectoDTO mensajeDirectoDTO) {
         mensajeDirectoService.update(id, mensajeDirectoDTO);
         return ResponseEntity.ok(id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> deleteMensajeDirecto(@PathVariable(name = "id") final Long id) {
         mensajeDirectoService.delete(id);

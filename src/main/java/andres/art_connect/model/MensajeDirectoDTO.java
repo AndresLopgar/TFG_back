@@ -11,14 +11,18 @@ import lombok.Setter;
 @Setter
 public class MensajeDirectoDTO {
 
-    private Long id;
+	private Long id;
 
     @NotNull
     @Size(max = 255)
     private String contenido;
 
-    private LocalDateTime fechaContenido;
+    private LocalDateTime fechaEnvio;
 
-    private Long idUsuario;
+    @NotNull
+    private Long remiteUsuarioId;
+
+    @NotNull
+    private Long destinoUsuarioId;
 
 }

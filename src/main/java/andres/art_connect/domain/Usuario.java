@@ -52,8 +52,11 @@ public class Usuario {
     @OneToMany(mappedBy = "idUsuario")
     private Set<Publicacion> idUsuarioPublicacion;
 
-    @OneToMany(mappedBy = "idUsuario")
-    private Set<MensajeDirecto> idUsuarioMensaje;
+    @OneToMany(mappedBy = "remiteUsuario")
+    private Set<MensajeDirecto> mensajesEnviados;
+
+    @OneToMany(mappedBy = "destinoUsuario")
+    private Set<MensajeDirecto> mensajesRecibidos;
 
     @OneToMany(mappedBy = "idCreador")
     private Set<Compania> idCompania;

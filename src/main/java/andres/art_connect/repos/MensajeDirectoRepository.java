@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MensajeDirectoRepository extends JpaRepository<MensajeDirecto, Long> {
 
-    MensajeDirecto findFirstByIdUsuario(Usuario usuario);
+	MensajeDirecto findFirstByRemiteUsuarioOrDestinoUsuario(Usuario remiteUsuario, Usuario destinoUsuario);
 
 }

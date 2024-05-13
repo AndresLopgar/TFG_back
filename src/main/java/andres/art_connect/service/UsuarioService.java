@@ -132,7 +132,7 @@ public class UsuarioService {
             referencedWarning.addParam(idUsuarioPublicacion.getId());
             return referencedWarning;
         }
-        final MensajeDirecto idUsuarioMensajeDirecto = mensajeDirectoRepository.findFirstByIdUsuario(usuario);
+        final MensajeDirecto idUsuarioMensajeDirecto = mensajeDirectoRepository.findFirstByRemiteUsuarioOrDestinoUsuario(usuario, usuario);
         if (idUsuarioMensajeDirecto != null) {
             referencedWarning.setKey("usuario.mensajeDirecto.idUsuario.referenced");
             referencedWarning.addParam(idUsuarioMensajeDirecto.getId());
