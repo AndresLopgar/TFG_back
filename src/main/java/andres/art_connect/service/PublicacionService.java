@@ -64,7 +64,6 @@ public class PublicacionService {
         publicacionDTO.setId(publicacion.getId());
         publicacionDTO.setContenido(publicacion.getContenido());
         publicacionDTO.setTipoContenido(publicacion.getTipoContenido());
-        publicacionDTO.setMediaPath(publicacion.getMediaPath());
         publicacionDTO.setFechaPublicacion(publicacion.getFechaPublicacion());
         publicacionDTO.setMeGusta(publicacion.getMeGusta());
         publicacionDTO.setNumMeGustas(publicacion.getNumMeGustas());
@@ -76,7 +75,6 @@ public class PublicacionService {
             final Publicacion publicacion) {
         publicacion.setContenido(publicacionDTO.getContenido());
         publicacion.setTipoContenido(publicacionDTO.getTipoContenido());
-        publicacion.setMediaPath(publicacionDTO.getMediaPath());
         publicacion.setFechaPublicacion(publicacionDTO.getFechaPublicacion());
         publicacion.setMeGusta(publicacionDTO.getMeGusta());
         publicacion.setNumMeGustas(publicacionDTO.getNumMeGustas());

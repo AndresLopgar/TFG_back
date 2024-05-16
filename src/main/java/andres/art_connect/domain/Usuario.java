@@ -8,9 +8,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.Set;
+
+import andres.art_connect.model.UsuarioDTO;
 import lombok.Getter;
 import lombok.Setter;
-
 
 @Entity
 @Getter
@@ -36,12 +37,12 @@ public class Usuario {
 
     @Column(nullable = false)
     private String profesion;
+    
+    @Column
+    private String fotoPerfil;
 
     @Column
     private LocalDateTime fechaRegistro;
-
-    @Column
-    private String fotoPerfil;
 
     @Column(nullable = false)
     private String tipoUsuario;
@@ -51,12 +52,6 @@ public class Usuario {
 
     @OneToMany(mappedBy = "idUsuario")
     private Set<Publicacion> idUsuarioPublicacion;
-
-    @OneToMany(mappedBy = "remiteUsuario")
-    private Set<MensajeDirecto> mensajesEnviados;
-
-    @OneToMany(mappedBy = "destinoUsuario")
-    private Set<MensajeDirecto> mensajesRecibidos;
 
     @OneToMany(mappedBy = "idCreador")
     private Set<Compania> idCompania;
@@ -69,5 +64,5 @@ public class Usuario {
 
     @OneToMany(mappedBy = "idSeguido")
     private Set<Amistad> idSeguido;
-
 }
+

@@ -2,10 +2,14 @@ package andres.art_connect.model;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.io.IOException;
 import java.time.LocalDateTime;
+
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Getter;
 import lombok.Setter;
-
 
 @Getter
 @Setter
@@ -15,17 +19,14 @@ public class UsuarioDTO {
 
     @NotNull
     @Size(max = 255)
-    @UsuarioNombreUnique
     private String nombre;
 
     @NotNull
     @Size(max = 255)
-    @UsuarioContrasenaUnique
     private String contrasena;
 
     @NotNull
     @Size(max = 255)
-    @UsuarioCorreoElectronicoUnique
     private String correoElectronico;
 
     @NotNull
@@ -36,7 +37,7 @@ public class UsuarioDTO {
     private String profesion;
 
     private LocalDateTime fechaRegistro;
-
+    
     @Size(max = 255)
     private String fotoPerfil;
 
@@ -45,5 +46,4 @@ public class UsuarioDTO {
     private String tipoUsuario;
 
     private Long companiaSeguida;
-
 }

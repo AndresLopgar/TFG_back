@@ -18,9 +18,6 @@ public class PublicacionDTO {
     @Size(max = 255)
     private String tipoContenido;
 
-    @Size(max = 255)
-    private String mediaPath;
-
     private LocalDateTime fechaPublicacion;
 
     private Boolean meGusta;
@@ -28,5 +25,7 @@ public class PublicacionDTO {
     private Long numMeGustas;
 
     private Long idUsuario;
+    
+    private Long idCompania;
 
 }

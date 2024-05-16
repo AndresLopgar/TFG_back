@@ -6,6 +6,8 @@ import andres.art_connect.util.ReferencedException;
 import andres.art_connect.util.ReferencedWarning;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+
+import java.io.IOException;
 import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -45,17 +47,18 @@ public class UsuarioResource {
 
     @PostMapping
     @ApiResponse(responseCode = "201")
-    public ResponseEntity<Long> createUsuario(@RequestBody @Valid final UsuarioDTO usuarioDTO) {
-        final Long createdId = usuarioService.create(usuarioDTO);
+    public ResponseEntity<Long> createUusario(
+            @RequestBody @Valid final UsuarioDTO usuarioDto) {
+        final Long createdId = usuarioService.create(usuarioDto);
         return new ResponseEntity<>(createdId, HttpStatus.CREATED);
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Long> updateUsuario(@PathVariable(name = "id") final Long id,
-            @RequestBody @Valid final UsuarioDTO usuarioDTO) {
+            @RequestBody @Valid final UsuarioDTO usuarioDTO) throws IOException {
         usuarioService.update(id, usuarioDTO);
         return ResponseEntity.ok(id);
-    }
+    }    
 
     @DeleteMapping("/delete/{id}")
     @ApiResponse(responseCode = "204")

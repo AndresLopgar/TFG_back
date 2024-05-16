@@ -1,44 +1,32 @@
 package andres.art_connect.service;
 
-import andres.art_connect.domain.Amistad;
-import andres.art_connect.domain.Comentario;
-import andres.art_connect.domain.Compania;
-import andres.art_connect.domain.MensajeDirecto;
-import andres.art_connect.domain.Publicacion;
-import andres.art_connect.domain.Usuario;
+import andres.art_connect.domain.*;
 import andres.art_connect.model.UsuarioDTO;
-import andres.art_connect.repos.AmistadRepository;
-import andres.art_connect.repos.ComentarioRepository;
-import andres.art_connect.repos.CompaniaRepository;
-import andres.art_connect.repos.MensajeDirectoRepository;
-import andres.art_connect.repos.PublicacionRepository;
-import andres.art_connect.repos.UsuarioRepository;
+import andres.art_connect.repos.*;
 import andres.art_connect.util.NotFoundException;
 import andres.art_connect.util.ReferencedWarning;
+
+import java.io.IOException;
 import java.util.List;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
 
 @Service
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final PublicacionRepository publicacionRepository;
-    private final MensajeDirectoRepository mensajeDirectoRepository;
     private final CompaniaRepository companiaRepository;
     private final ComentarioRepository comentarioRepository;
     private final AmistadRepository amistadRepository;
 
     public UsuarioService(final UsuarioRepository usuarioRepository,
-            final PublicacionRepository publicacionRepository,
-            final MensajeDirectoRepository mensajeDirectoRepository,
-            final CompaniaRepository companiaRepository,
-            final ComentarioRepository comentarioRepository,
-            final AmistadRepository amistadRepository) {
+                          final PublicacionRepository publicacionRepository,
+                          final CompaniaRepository companiaRepository,
+                          final ComentarioRepository comentarioRepository,
+                          final AmistadRepository amistadRepository) {
         this.usuarioRepository = usuarioRepository;
         this.publicacionRepository = publicacionRepository;
-        this.mensajeDirectoRepository = mensajeDirectoRepository;
         this.companiaRepository = companiaRepository;
         this.comentarioRepository = comentarioRepository;
         this.amistadRepository = amistadRepository;
@@ -57,13 +45,13 @@ public class UsuarioService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Long create(final UsuarioDTO usuarioDTO) {
+    public Long create(final UsuarioDTO usuarioDTO){
         final Usuario usuario = new Usuario();
         mapToEntity(usuarioDTO, usuario);
         return usuarioRepository.save(usuario).getId();
     }
 
-    public void update(final Long id, final UsuarioDTO usuarioDTO) {
+    public void update(final Long id, final UsuarioDTO usuarioDTO){
         final Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(NotFoundException::new);
         mapToEntity(usuarioDTO, usuario);
@@ -88,7 +76,7 @@ public class UsuarioService {
         return usuarioDTO;
     }
 
-    private Usuario mapToEntity(final UsuarioDTO usuarioDTO, final Usuario usuario) {
+    private void mapToEntity(final UsuarioDTO usuarioDTO, final Usuario usuario) {
         usuario.setNombre(usuarioDTO.getNombre());
         usuario.setContrasena(usuarioDTO.getContrasena());
         usuario.setCorreoElectronico(usuarioDTO.getCorreoElectronico());
@@ -98,8 +86,9 @@ public class UsuarioService {
         usuario.setFotoPerfil(usuarioDTO.getFotoPerfil());
         usuario.setTipoUsuario(usuarioDTO.getTipoUsuario());
         usuario.setCompaniaSeguida(usuarioDTO.getCompaniaSeguida());
-        return usuario;
     }
+
+
 
     public boolean nombreExists(final String nombre) {
         return usuarioRepository.existsByNombreIgnoreCase(nombre);
@@ -112,7 +101,7 @@ public class UsuarioService {
     public boolean correoElectronicoExists(final String correoElectronico) {
         return usuarioRepository.existsByCorreoElectronicoIgnoreCase(correoElectronico);
     }
-    
+
     public void updateCompaniaSeguida(Long userId, Long nuevaCompaniaSeguida) {
         Usuario usuario = usuarioRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado con ID: " + userId));
@@ -120,7 +109,6 @@ public class UsuarioService {
         usuario.setCompaniaSeguida(nuevaCompaniaSeguida);
         usuarioRepository.save(usuario);
     }
-
 
     public ReferencedWarning getReferencedWarning(final Long id) {
         final ReferencedWarning referencedWarning = new ReferencedWarning();
@@ -130,12 +118,6 @@ public class UsuarioService {
         if (idUsuarioPublicacion != null) {
             referencedWarning.setKey("usuario.publicacion.idUsuario.referenced");
             referencedWarning.addParam(idUsuarioPublicacion.getId());
-            return referencedWarning;
-        }
-        final MensajeDirecto idUsuarioMensajeDirecto = mensajeDirectoRepository.findFirstByRemiteUsuarioOrDestinoUsuario(usuario, usuario);
-        if (idUsuarioMensajeDirecto != null) {
-            referencedWarning.setKey("usuario.mensajeDirecto.idUsuario.referenced");
-            referencedWarning.addParam(idUsuarioMensajeDirecto.getId());
             return referencedWarning;
         }
         final Compania idCreadorCompania = companiaRepository.findFirstByIdCreador(usuario);
@@ -164,5 +146,4 @@ public class UsuarioService {
         }
         return null;
     }
-
 }

@@ -32,9 +32,6 @@ public class Publicacion {
     private String tipoContenido;
 
     @Column
-    private String mediaPath;
-
-    @Column
     private LocalDateTime fechaPublicacion;
 
     @Column
@@ -46,6 +43,10 @@ public class Publicacion {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario_id")
     private Usuario idUsuario;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_compania_id")
+    private Usuario idCompania;
 
     @OneToMany(mappedBy = "idPublicacion")
     private Set<Comentario> idPublicacionComentario;
