@@ -15,9 +15,6 @@ public class PublicacionDTO {
     @Size(max = 255)
     private String contenido;
 
-    @Size(max = 255)
-    private String tipoContenido;
-
     private LocalDateTime fechaPublicacion;
 
     private Boolean meGusta;

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-@RequestMapping(value = "/api/publicacions", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/api/publicaciones", produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin("*")
 public class PublicacionResource {
 
@@ -67,5 +67,18 @@ public class PublicacionResource {
         publicacionService.delete(id);
         return ResponseEntity.noContent().build();
     }
+    
+    @GetMapping("/usuario/{idUsuario}")
+    public ResponseEntity<List<PublicacionDTO>> getAllPublicacionesByIdUsuario(@PathVariable(name = "idUsuario") final Long idUsuario) {
+        List<PublicacionDTO> publicaciones = publicacionService.getAllPublicacionesByIdUsuario(idUsuario);
+        return ResponseEntity.ok(publicaciones);
+    }
+
+    @GetMapping("/compania/{idCompania}")
+    public ResponseEntity<List<PublicacionDTO>> getAllPublicacionesByIdCompania(@PathVariable(name = "idCompania") final Long idCompania) {
+        List<PublicacionDTO> publicaciones = publicacionService.getAllPublicacionesByIdCompania(idCompania);
+        return ResponseEntity.ok(publicaciones);
+    }
+
 
 }

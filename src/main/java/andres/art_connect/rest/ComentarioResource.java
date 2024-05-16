@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,14 +47,14 @@ public class ComentarioResource {
         return new ResponseEntity<>(createdId, HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("{id}")
     public ResponseEntity<Long> updateComentario(@PathVariable(name = "id") final Long id,
             @RequestBody @Valid final ComentarioDTO comentarioDTO) {
         comentarioService.update(id, comentarioDTO);
         return ResponseEntity.ok(id);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> deleteComentario(@PathVariable(name = "id") final Long id) {
         comentarioService.delete(id);

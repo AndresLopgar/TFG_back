@@ -29,9 +29,6 @@ public class Publicacion {
     private String contenido;
 
     @Column
-    private String tipoContenido;
-
-    @Column
     private LocalDateTime fechaPublicacion;
 
     @Column
@@ -46,7 +43,7 @@ public class Publicacion {
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_compania_id")
-    private Usuario idCompania;
+    private Compania idCompania;
 
     @OneToMany(mappedBy = "idPublicacion")
     private Set<Comentario> idPublicacionComentario;
