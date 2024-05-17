@@ -74,7 +74,7 @@ public class PublicacionService {
     }
 
     public List<PublicacionDTO> getAllPublicacionesByIdCompania(Long idCompania) {
-        List<Publicacion> publicaciones = publicacionRepository.findAllByIdCompania(idCompania, Sort.by("idCompania"));
+        List<Publicacion> publicaciones = publicacionRepository.findAllByIdCompania(idCompania);
         return mapToDTOList(publicaciones);
     }
     
@@ -92,6 +92,7 @@ public class PublicacionService {
         publicacionDTO.setMeGusta(publicacion.getMeGusta());
         publicacionDTO.setNumMeGustas(publicacion.getNumMeGustas());
         publicacionDTO.setIdUsuario(publicacion.getIdUsuario() == null ? null : publicacion.getIdUsuario().getId());
+        publicacionDTO.setIdCompania(publicacion.getIdCompania());
         return publicacionDTO;
     }
 
@@ -104,6 +105,7 @@ public class PublicacionService {
         final Usuario idUsuario = publicacionDTO.getIdUsuario() == null ? null : usuarioRepository.findById(publicacionDTO.getIdUsuario())
                 .orElseThrow(() -> new NotFoundException("idUsuario not found"));
         publicacion.setIdUsuario(idUsuario);
+        publicacion.setIdCompania(publicacionDTO.getIdCompania());
         return publicacion;
     }
 

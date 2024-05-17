@@ -41,9 +41,8 @@ public class Publicacion {
     @JoinColumn(name = "id_usuario_id")
     private Usuario idUsuario;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_compania_id")
-    private Compania idCompania;
+    @Column
+    private Long idCompania;
 
     @OneToMany(mappedBy = "idPublicacion")
     private Set<Comentario> idPublicacionComentario;
