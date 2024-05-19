@@ -9,6 +9,8 @@ import andres.art_connect.repos.PublicacionRepository;
 import andres.art_connect.repos.UsuarioRepository;
 import andres.art_connect.util.NotFoundException;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +58,14 @@ public class ComentarioService {
 
     public void delete(final Long id) {
         comentarioRepository.deleteById(id);
+    }
+    
+    public List<ComentarioDTO> findAllByPublicacionId(Long idPublicacion) {
+        List<Comentario> comentarios = comentarioRepository.findAll();
+        return comentarios.stream()
+                .filter(comentario -> comentario.getIdPublicacion() != null && comentario.getIdPublicacion().getId().equals(idPublicacion))
+                .map(comentario -> mapToDTO(comentario, new ComentarioDTO()))
+                .collect(Collectors.toList());
     }
 
     private ComentarioDTO mapToDTO(final Comentario comentario, final ComentarioDTO comentarioDTO) {

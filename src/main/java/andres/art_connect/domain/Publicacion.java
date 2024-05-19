@@ -45,6 +45,6 @@ public class Publicacion {
     private Long idCompania;
 
     @OneToMany(mappedBy = "idPublicacion")
-    private Set<Comentario> idPublicacionComentario;
+    private Set<Comentario> comentarios;
 
 }

@@ -4,6 +4,7 @@ import andres.art_connect.domain.Comentario;
 import andres.art_connect.domain.Compania;
 import andres.art_connect.domain.Publicacion;
 import andres.art_connect.domain.Usuario;
+import andres.art_connect.model.ComentarioDTO;
 import andres.art_connect.model.PublicacionDTO;
 import andres.art_connect.repos.ComentarioRepository;
 import andres.art_connect.repos.CompaniaRepository;
@@ -12,10 +13,13 @@ import andres.art_connect.repos.UsuarioRepository;
 import andres.art_connect.util.NotFoundException;
 import andres.art_connect.util.ReferencedWarning;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 
 @Service
@@ -39,13 +43,13 @@ public class PublicacionService {
     public List<PublicacionDTO> findAll() {
         final List<Publicacion> publicacions = publicacionRepository.findAll(Sort.by("id"));
         return publicacions.stream()
-                .map(publicacion -> mapToDTO(publicacion, new PublicacionDTO()))
+        		.map(this::mapToDTO)
                 .toList();
     }
 
     public PublicacionDTO get(final Long id) {
         return publicacionRepository.findById(id)
-                .map(publicacion -> mapToDTO(publicacion, new PublicacionDTO()))
+        		.map(this::mapToDTO)
                 .orElseThrow(NotFoundException::new);
     }
 
@@ -80,21 +84,54 @@ public class PublicacionService {
     
     private List<PublicacionDTO> mapToDTOList(List<Publicacion> publicaciones) {
         return publicaciones.stream()
-            .map(publicacion -> mapToDTO(publicacion, new PublicacionDTO()))
+            .map(this::mapToDTO)
             .collect(Collectors.toList());
     }
 
-    private PublicacionDTO mapToDTO(final Publicacion publicacion,
-            final PublicacionDTO publicacionDTO) {
+    
+    @Transactional(readOnly = true)
+    public List<PublicacionDTO> findAllWithComentarios() {
+        return publicacionRepository.findAllWithComentarios().stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
+    private PublicacionDTO mapToDTO(final Publicacion publicacion) {
+        PublicacionDTO publicacionDTO = new PublicacionDTO();
         publicacionDTO.setId(publicacion.getId());
         publicacionDTO.setContenido(publicacion.getContenido());
         publicacionDTO.setFechaPublicacion(publicacion.getFechaPublicacion());
         publicacionDTO.setMeGusta(publicacion.getMeGusta());
         publicacionDTO.setNumMeGustas(publicacion.getNumMeGustas());
-        publicacionDTO.setIdUsuario(publicacion.getIdUsuario() == null ? null : publicacion.getIdUsuario().getId());
+        // Mapea el ID del usuario si está presente
+        if (publicacion.getIdUsuario() != null) {
+            publicacionDTO.setIdUsuario(publicacion.getIdUsuario().getId());
+        }
+        // Mapea el ID de la compañía si está presente
         publicacionDTO.setIdCompania(publicacion.getIdCompania());
+        // Mapea los comentarios si están presentes
+        if (Hibernate.isInitialized(publicacion.getComentarios())) {
+            Set<ComentarioDTO> comentariosDTO = publicacion.getComentarios().stream()
+                    .map(this::mapComentarioToDTO)
+                    .collect(Collectors.toSet());
+            publicacionDTO.setComentarios(comentariosDTO);
+        }
         return publicacionDTO;
     }
+
+
+    private ComentarioDTO mapComentarioToDTO(final Comentario comentario) {
+        ComentarioDTO comentarioDTO = new ComentarioDTO();
+        comentarioDTO.setId(comentario.getId());
+        comentarioDTO.setContenido(comentario.getContenido());
+        comentarioDTO.setFechaComentario(comentario.getFechaComentario());
+        // Mapea el ID del usuario si está presente
+        if (comentario.getIdUsuario() != null) {
+            comentarioDTO.setIdUsuario(comentario.getIdUsuario().getId());
+        }
+        return comentarioDTO;
+    }
+
 
     private Publicacion mapToEntity(final PublicacionDTO publicacionDTO,
             final Publicacion publicacion) {

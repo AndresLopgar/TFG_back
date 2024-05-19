@@ -2,6 +2,8 @@ package andres.art_connect.model;
 
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
+import java.util.Set;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,4 +27,5 @@ public class PublicacionDTO {
     
     private Long idCompania;
 
+    private Set<ComentarioDTO> comentarios;
 }

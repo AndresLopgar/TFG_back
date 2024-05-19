@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping(value = "/api/comentarios", produces = MediaType.APPLICATION_JSON_VALUE)
+@CrossOrigin("*")
 public class ComentarioResource {
 
     private final ComentarioService comentarioService;
@@ -47,18 +48,23 @@ public class ComentarioResource {
         return new ResponseEntity<>(createdId, HttpStatus.CREATED);
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<Long> updateComentario(@PathVariable(name = "id") final Long id,
             @RequestBody @Valid final ComentarioDTO comentarioDTO) {
         comentarioService.update(id, comentarioDTO);
         return ResponseEntity.ok(id);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/delete/{id}")
     @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> deleteComentario(@PathVariable(name = "id") final Long id) {
         comentarioService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+    
+    @GetMapping("/publicacion/{idPublicacion}")
+    public ResponseEntity<List<ComentarioDTO>> getAllComentariosByPublicacionId(@PathVariable(name = "idPublicacion") final Long idPublicacion) {
+        return ResponseEntity.ok(comentarioService.findAllByPublicacionId(idPublicacion));
     }
 
 }
