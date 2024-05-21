@@ -1,5 +1,6 @@
 package andres.art_connect.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -44,7 +45,7 @@ public class Publicacion {
     @Column
     private Long idCompania;
 
-    @OneToMany(mappedBy = "idPublicacion")
+    @OneToMany(mappedBy = "idPublicacion", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comentario> comentarios;
 
 }

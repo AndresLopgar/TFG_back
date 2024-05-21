@@ -63,10 +63,6 @@ public class UsuarioResource {
     @DeleteMapping("/delete/{id}")
     @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> deleteUsuario(@PathVariable(name = "id") final Long id) {
-        final ReferencedWarning referencedWarning = usuarioService.getReferencedWarning(id);
-        if (referencedWarning != null) {
-            throw new ReferencedException(referencedWarning);
-        }
         usuarioService.delete(id);
         return ResponseEntity.noContent().build();
     }

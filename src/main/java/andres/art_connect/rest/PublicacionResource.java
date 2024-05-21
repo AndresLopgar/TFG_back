@@ -60,10 +60,6 @@ public class PublicacionResource {
     @DeleteMapping("/delete/{id}")
     @ApiResponse(responseCode = "204")
     public ResponseEntity<Void> deletePublicacion(@PathVariable(name = "id") final Long id) {
-        final ReferencedWarning referencedWarning = publicacionService.getReferencedWarning(id);
-        if (referencedWarning != null) {
-            throw new ReferencedException(referencedWarning);
-        }
         publicacionService.delete(id);
         return ResponseEntity.noContent().build();
     }

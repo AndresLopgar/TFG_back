@@ -11,6 +11,7 @@ import andres.art_connect.repos.CompaniaRepository;
 import andres.art_connect.repos.PublicacionRepository;
 import andres.art_connect.repos.UsuarioRepository;
 import andres.art_connect.util.NotFoundException;
+import andres.art_connect.util.ReferencedException;
 import andres.art_connect.util.ReferencedWarning;
 import java.util.List;
 import java.util.Set;

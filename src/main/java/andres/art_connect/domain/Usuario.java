@@ -1,5 +1,6 @@
 package andres.art_connect.domain;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -50,19 +51,19 @@ public class Usuario {
     @Column
     private Long companiaSeguida;
 
-    @OneToMany(mappedBy = "idUsuario")
+    @OneToMany(mappedBy = "idUsuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Publicacion> idUsuarioPublicacion;
 
-    @OneToMany(mappedBy = "idCreador")
+    @OneToMany(mappedBy = "idCreador", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Compania> idCompania;
 
-    @OneToMany(mappedBy = "idUsuario")
+    @OneToMany(mappedBy = "idUsuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comentario> idUsuarioComentario;
 
-    @OneToMany(mappedBy = "idSeguidor")
+    @OneToMany(mappedBy = "idSeguidor", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Amistad> idSeguidor;
 
-    @OneToMany(mappedBy = "idSeguido")
+    @OneToMany(mappedBy = "idSeguido", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Amistad> idSeguido;
 }
 
