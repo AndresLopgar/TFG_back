@@ -53,5 +53,11 @@ public class NotificacionResource {
         notificacionService.delete(id);
         return ResponseEntity.noContent().build();
     }
+    
+    @GetMapping("/remitente/{idUsuarioRemitente}")
+    public ResponseEntity<List<NotificacionDTO>> getNotificacionesByUsuarioRemitente(@PathVariable Long idUsuarioRemitente) {
+        List<NotificacionDTO> notificaciones = notificacionService.findAllByUsuarioRemitente(idUsuarioRemitente);
+        return ResponseEntity.ok(notificaciones);
+    }
 }
 

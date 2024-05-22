@@ -1,8 +1,10 @@
 package andres.art_connect.service;
 
 import andres.art_connect.domain.Notificacion;
+import andres.art_connect.domain.Usuario;
 import andres.art_connect.model.NotificacionDTO;
 import andres.art_connect.repos.NotificacionRepository;
+import andres.art_connect.repos.UsuarioRepository;
 import andres.art_connect.util.NotFoundException;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -14,9 +16,11 @@ import java.util.stream.Collectors;
 public class NotificacionService {
 
     private final NotificacionRepository notificacionRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    public NotificacionService(NotificacionRepository notificacionRepository) {
+    public NotificacionService(NotificacionRepository notificacionRepository, UsuarioRepository usuarioRepository) {
         this.notificacionRepository = notificacionRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     public List<NotificacionDTO> findAll() {
@@ -47,6 +51,13 @@ public class NotificacionService {
     public void delete(Long id) {
         notificacionRepository.deleteById(id);
     }
+    
+    public List<NotificacionDTO> findAllByUsuarioRemitente(Long idUsuarioRemitente) {
+        List<Notificacion> notificaciones = notificacionRepository.findByIdUsuarioRemitente_Id(idUsuarioRemitente);
+        return notificaciones.stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
 
     private NotificacionDTO mapToDTO(Notificacion notificacion) {
         NotificacionDTO notificacionDTO = new NotificacionDTO();
@@ -55,6 +66,7 @@ public class NotificacionService {
         notificacionDTO.setTipoNotificacion(notificacion.getTipoNotificacion());
         notificacionDTO.setIdUsuarioEmisor(notificacion.getIdUsuarioEmisor().getId());
         notificacionDTO.setIdUsuarioRemitente(notificacion.getIdUsuarioRemitente().getId());
+        notificacionDTO.setFechaNotificacion(notificacion.getFechaNotificacion()); // Añadir la fecha si es relevante
         return notificacionDTO;
     }
 
@@ -62,14 +74,34 @@ public class NotificacionService {
         Notificacion notificacion = new Notificacion();
         notificacion.setContenido(notificacionDTO.getContenido());
         notificacion.setTipoNotificacion(notificacionDTO.getTipoNotificacion());
-        // Asegúrate de configurar correctamente los IDs de los usuarios
-        // Dependiendo de cómo esté implementada tu lógica de negocio
+        notificacion.setFechaNotificacion(notificacionDTO.getFechaNotificacion()); // Añadir la fecha si es relevante
+
+        Usuario emisor = usuarioRepository.findById(notificacionDTO.getIdUsuarioEmisor())
+                .orElseThrow(() -> new NotFoundException("Usuario emisor no encontrado"));
+        Usuario remitente = usuarioRepository.findById(notificacionDTO.getIdUsuarioRemitente())
+                .orElseThrow(() -> new NotFoundException("Usuario remitente no encontrado"));
+
+        notificacion.setIdUsuarioEmisor(emisor);
+        notificacion.setIdUsuarioRemitente(remitente);
+
         return notificacion;
     }
 
     private void updateEntityFromDto(NotificacionDTO notificacionDTO, Notificacion notificacion) {
         notificacion.setContenido(notificacionDTO.getContenido());
         notificacion.setTipoNotificacion(notificacionDTO.getTipoNotificacion());
-        // Aquí podrías agregar más lógica de actualización según tus necesidades
+        notificacion.setFechaNotificacion(notificacionDTO.getFechaNotificacion()); // Añadir la fecha si es relevante
+
+        if (notificacion.getIdUsuarioEmisor().getId() != notificacionDTO.getIdUsuarioEmisor()) {
+            Usuario emisor = usuarioRepository.findById(notificacionDTO.getIdUsuarioEmisor())
+                    .orElseThrow(() -> new NotFoundException("Usuario emisor no encontrado"));
+            notificacion.setIdUsuarioEmisor(emisor);
+        }
+
+        if (notificacion.getIdUsuarioRemitente().getId() != notificacionDTO.getIdUsuarioRemitente()) {
+            Usuario remitente = usuarioRepository.findById(notificacionDTO.getIdUsuarioRemitente())
+                    .orElseThrow(() -> new NotFoundException("Usuario remitente no encontrado"));
+            notificacion.setIdUsuarioRemitente(remitente);
+        }
     }
 }
