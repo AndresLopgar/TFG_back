@@ -13,10 +13,11 @@ public class HomeController {
         return "index.html";
     }
 
+	
     // Manejar todas las demás solicitudes y redirigirlas a index.html
     @RequestMapping(value = "/{path:[^\\.]*}", method = RequestMethod.GET)
     public String redirect() {
         return "forward:/";
     }
-
+    
 }
