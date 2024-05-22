@@ -20,7 +20,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer{
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		registry.addEndpoint("/chat-socket")
-		.setAllowedOrigins("http://localhost:4200","https://artconnect-9bc127224463.herokuapp.com")
+		.setAllowedOrigins("http://localhost:4200","wss://artconnect-9bc127224463.herokuapp.com")
 		.withSockJS();
 	}
 }
