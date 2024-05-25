@@ -46,4 +46,6 @@ public class UsuarioDTO {
     private String tipoUsuario;
 
     private Long companiaSeguida;
+    
+    private int[] publicacionesLiked = new int[0];
 }

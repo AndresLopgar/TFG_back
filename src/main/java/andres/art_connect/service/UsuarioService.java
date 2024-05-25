@@ -73,6 +73,7 @@ public class UsuarioService {
         usuarioDTO.setFotoPerfil(usuario.getFotoPerfil());
         usuarioDTO.setTipoUsuario(usuario.getTipoUsuario());
         usuarioDTO.setCompaniaSeguida(usuario.getCompaniaSeguida());
+        usuarioDTO.setPublicacionesLiked(usuario.getPublicacionesLiked() != null ? usuario.getPublicacionesLiked() : new int[0]);
         return usuarioDTO;
     }
 
@@ -86,6 +87,7 @@ public class UsuarioService {
         usuario.setFotoPerfil(usuarioDTO.getFotoPerfil());
         usuario.setTipoUsuario(usuarioDTO.getTipoUsuario());
         usuario.setCompaniaSeguida(usuarioDTO.getCompaniaSeguida());
+        usuario.setPublicacionesLiked(usuarioDTO.getPublicacionesLiked() != null ? usuarioDTO.getPublicacionesLiked() : new int[0]);
     }
 
 
@@ -108,6 +110,10 @@ public class UsuarioService {
 
         usuario.setCompaniaSeguida(nuevaCompaniaSeguida);
         usuarioRepository.save(usuario);
+    }
+    
+    public int[] findPublicacionesLikedByUserId(Long userId) {
+        return usuarioRepository.findPublicacionesLikedByUserId(userId);
     }
 
     public ReferencedWarning getReferencedWarning(final Long id) {

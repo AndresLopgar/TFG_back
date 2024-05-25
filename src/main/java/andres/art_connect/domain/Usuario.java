@@ -50,6 +50,8 @@ public class Usuario {
 
     @Column
     private Long companiaSeguida;
+    
+    @Column int[] publicacionesLiked = new int[0];;
 
     @OneToMany(mappedBy = "idUsuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Publicacion> idUsuarioPublicacion;

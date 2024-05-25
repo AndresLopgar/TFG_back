@@ -73,6 +73,11 @@ public class UsuarioResource {
         usuarioService.updateCompaniaSeguida(id, nuevaCompaniaSeguida);
         return ResponseEntity.ok().build();
     }
+    
+    @GetMapping("/{id}/publicacionesLiked")
+    public ResponseEntity<int[]> getPublicacionesLikedByUserId(@PathVariable(name = "id") final Long userId) {
+        return ResponseEntity.ok(usuarioService.findPublicacionesLikedByUserId(userId));
+    }
 
 
 
