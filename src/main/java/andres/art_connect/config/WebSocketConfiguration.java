@@ -9,7 +9,6 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 
 @Configuration
 @EnableWebSocketMessageBroker
-@CrossOrigin("*")
 public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer{
 	
 	@Override
