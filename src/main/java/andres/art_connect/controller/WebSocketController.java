@@ -38,6 +38,7 @@ public class WebSocketController {
     }
 	
 	@GetMapping("/api/chat/{roomId}")
+	@CrossOrigin("*")
 	public ResponseEntity<List<ChatMessageModel>> getAllChatMessages(@PathVariable String roomId){
 		List<ChatMessageModel> result = chatSocketRepository.findByRoomId(roomId);
 		return ResponseEntity.ok(result);
