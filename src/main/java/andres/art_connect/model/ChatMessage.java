@@ -8,7 +8,7 @@ import lombok.Data;
 public class ChatMessage {
 
 	private String message;
-	private  int usuarioId;
+	private  String usuarioId;
 
 }
 

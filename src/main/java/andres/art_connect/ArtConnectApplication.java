@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "andres.art_connect")
 public class ArtConnectApplication {
 
     public static void main(final String[] args) {
