@@ -73,6 +73,7 @@ public class UsuarioService {
         usuarioDTO.setFotoPerfil(usuario.getFotoPerfil());
         usuarioDTO.setTipoUsuario(usuario.getTipoUsuario());
         usuarioDTO.setCompaniaSeguida(usuario.getCompaniaSeguida());
+        usuarioDTO.setPortafolio(usuario.getPortafolio());
         return usuarioDTO;
     }
 
@@ -86,6 +87,7 @@ public class UsuarioService {
         usuario.setFotoPerfil(usuarioDTO.getFotoPerfil());
         usuario.setTipoUsuario(usuarioDTO.getTipoUsuario());
         usuario.setCompaniaSeguida(usuarioDTO.getCompaniaSeguida());
+        usuario.setPortafolio(usuarioDTO.getPortafolio());
     }
 
 

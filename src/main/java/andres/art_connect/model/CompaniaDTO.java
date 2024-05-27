@@ -1,5 +1,6 @@
 package andres.art_connect.model;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
@@ -29,5 +30,7 @@ public class CompaniaDTO {
     private String fotoPerfil;
 
     private Long idCreador;
+    
+    private String portafolio;
 
 }

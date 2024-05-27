@@ -61,6 +61,7 @@ public class CompaniaService {
         companiaDTO.setMiembros(compania.getMiembros());
         companiaDTO.setFotoPerfil(compania.getFotoPerfil());
         companiaDTO.setIdCreador(compania.getIdCreador() == null ? null : compania.getIdCreador().getId());
+        companiaDTO.setPortafolio(compania.getPortafolio());
         return companiaDTO;
     }
 
@@ -73,6 +74,7 @@ public class CompaniaService {
         final Usuario idCreador = companiaDTO.getIdCreador() == null ? null : usuarioRepository.findById(companiaDTO.getIdCreador())
                 .orElseThrow(() -> new NotFoundException("idCreador not found"));
         compania.setIdCreador(idCreador);
+        compania.setPortafolio(companiaDTO.getPortafolio());
         return compania;
     }
 

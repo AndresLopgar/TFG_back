@@ -37,6 +37,9 @@ public class Compania {
 
     @Column
     private String fotoPerfil;
+    
+    @Column
+    private String portafolio;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_creador_id")
