@@ -10,7 +10,6 @@ import jakarta.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-import andres.art_connect.model.UsuarioDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -68,5 +67,11 @@ public class Usuario {
 
     @OneToMany(mappedBy = "idSeguido", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Amistad> idSeguido;
+    
+    @OneToMany(mappedBy = "idUsuarioEmisor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Notificacion> idUsuarioEmisor;
+    
+    @OneToMany(mappedBy = "idUsuarioRemitente", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Notificacion> idUsuarioRemitente;
 }
 
